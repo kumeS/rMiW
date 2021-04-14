@@ -1,0 +1,25 @@
+---
+title: "rMiW_01_"
+author: "Satoshi Kume"
+date: "2/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+
+```
+## R Markdown
+
+
+```{r cars}
+
+```
+
+## Including Plots
+
+
+```{r pressure, echo=FALSE}
+
+
+```

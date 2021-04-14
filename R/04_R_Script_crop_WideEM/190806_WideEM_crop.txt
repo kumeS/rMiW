@@ -1,0 +1,7 @@
+convert -quality 100 -depth 8 -type Grayscale -crop 1024x1024 
+[Pic]
+[Out]
+/WideEM-%04d.png
+
+## Rscript [R file] [Tiled_img Directory] 
+Rscript /Users/skume/Desktop/R_keras_DL/02_Dataset/190806_remove_not_1024.R /Users/skume/Desktop/R_keras_DL/02_Dataset/Mouse_Kidney/NEP4/Tiled_img
