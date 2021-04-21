@@ -1,11 +1,26 @@
 Package: rMiW
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: rMiW - R package for image analysis workflow for microscopy image
+Version: 0.99.1
 Encoding: UTF-8
-LazyData: true
+Authors@R: c(
+    person (given = "Satoshi", family = "Kume",
+    role = c("aut", "cre"), 
+    email = "satoshi.kume.1984@gmail.com",
+    comment = c(ORCID = "0000-0001-7481-2843"))
+    )
+Maintainer: Satoshi Kume <yourself@somewhere.net>
+Description: test version.
+Depends: R (>= 4.0.0)
+Imports: markdown, rmarkdown
+Suggests: knitr, 
+    BiocStyle,
+    magick, 
+    purrr, 
+    magrittr, 
+    filesstrings, 
+    animation
+VignetteBuilder: knitr
+License: Artistic-2.0
+URL: https://github.com/kumeS/rMiW
+LazyLoad: yes

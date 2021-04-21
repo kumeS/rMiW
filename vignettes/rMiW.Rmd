@@ -1,25 +1,34 @@
 ---
-title: "rMiW_01_"
-author: "Satoshi Kume"
-date: "2/26/2020"
-output: html_document
+title: "rMiW: R package for image analysis workflow for microscopy images"
+author: 
+- name: Satoshi Kume
+  affiliation:
+  - RIKEN Center for Biosystems Dynamics Research
+  - Osaka City University Center for Health Science Innovation
+  - Osaka Electro-Communication University
+  email: satoshi.kume.1984@gmail.com
+date: "`r Sys.Date()`"
+graphics: no
+package: knitr, magick
+output:
+    BiocStyle::html_document:
+        toc_float: true
+vignette: >
+    %\VignetteIndexEntry{rMiW}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-
-
-```
-## R Markdown
-
-
-```{r cars}
-
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
 ```
 
-## Including Plots
+**Last modified:** `r file.info("rMiW.Rmd")$mtime`<br />
+**Compiled**: `r date()`
 
+# Introduction
 
-```{r pressure, echo=FALSE}
-
+```{ r }
 
 ```
+
