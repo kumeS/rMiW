@@ -12,7 +12,7 @@ Authors@R: c(
 Maintainer: Satoshi Kume <yourself@somewhere.net>
 Description: test version.
 Depends: R (>= 4.0.0)
-Imports: markdown, rmarkdown
+Imports: markdown, rmarkdown, keras
 Suggests: roxygen2,
     knitr, 
     BiocStyle,
@@ -21,7 +21,6 @@ Suggests: roxygen2,
     magrittr, 
     filesstrings, 
     animation,
-    keras,
     DiagrammeR,
     assertthat,
     dplyr,

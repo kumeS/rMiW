@@ -2,11 +2,13 @@
 % Please edit documentation in R/model_plot_modi.R
 \name{plot_model_modi}
 \alias{plot_model_modi}
-\title{Create network view for the keras model object.}
+\title{Create network diagram for the keras model object.}
 \usage{
 plot_model_modi(model, width, height, ...)
 }
 \arguments{
+\item{model}{the model object in Keras.}
+
 \item{width}{a plot size of width.}
 
 \item{height}{a plot size of height.}
@@ -16,11 +18,16 @@ A plot of the model network.
 }
 \description{
 visualize a model in Keras
+This function was modified the plot_model function from
+deepviz (https://github.com/andrie/deepviz).
 }
 \examples{
 \dontrun{
 plot_model_modi(model)
 }
+}
+\references{
+deepviz (https://github.com/andrie/deepviz)
 }
 \author{
 Satoshi Kume

@@ -8,11 +8,9 @@ list2tensor(xList)
 }
 \arguments{
 \item{xList}{list data of 3D array}
-
-\item{yList}{list data of 4D array.}
 }
 \value{
-4D/5D Array.
+4D Array.
 }
 \description{
 Convert list data to 4D/5D array
@@ -38,10 +36,6 @@ new_conv_dim1, new_conv_dim2 and new_conv_dim3 values might have changed due to 
 \dontrun{
 
 Res2 <- list2tensor(xList)
-
-Res3 <- list3tensor(yList)
-
-Res4 <- list4tensor(yList)
 
 }
 }

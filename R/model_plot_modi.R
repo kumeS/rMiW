@@ -1,12 +1,15 @@
 ##' @description visualize a model in Keras
+##' This function was modified the plot_model function from
+##' deepviz (https://github.com/andrie/deepviz).
 ##'
-##' @title Create network view for the keras model object.
-##' @param model
+##' @title Create network diagram for the keras model object.
+##' @param model the model object in Keras.
 ##' @param width a plot size of width.
 ##' @param height a plot size of height.
 ##' @return A plot of the model network.
 ##' @author Satoshi Kume
 ##' @export
+##' @references deepviz (https://github.com/andrie/deepviz)
 ##' @examples
 ##' \dontrun{
 ##' plot_model_modi(model)
@@ -96,7 +99,11 @@ is.keras_model_network <- function(x){
 plot_model <- function(model, width=4.5, height=1, ...){
 
   nodes_df <- model_nodes(model)
-  if (is.keras_model_sequential(model)){edges_df <- model_edges_sequential(nodes_df)}else{edges_df <- model_edges_network(model, nodes_df)}
+  if (is.keras_model_sequential(model)){
+    edges_df <- model_edges_sequential(nodes_df)
+  }else{
+    edges_df <- model_edges_network(model, nodes_df)
+  }
 
   graph <- DiagrammeR::create_graph(nodes_df, edges_df)
   graph <- DiagrammeR::set_edge_attrs(graph, "arrowhead", "vee")
@@ -108,35 +115,54 @@ plot_model <- function(model, width=4.5, height=1, ...){
   graph <- DiagrammeR::set_node_attrs(graph, "fontcolor", "black")
   graph <- DiagrammeR::set_node_attrs(graph, "fontsize", 15)
 
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "blue", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "skyblue", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "blue", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "skyblue", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "red", nodes = (1:nrow(nodes_df))[nodes_df$type == "Activation"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "pink", nodes = (1:nrow(nodes_df))[nodes_df$type == "Activation"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "green", nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "aquamarine", nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "green", nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "aquamarine", nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "black", nodes = (1:nrow(nodes_df))[nodes_df$type == "InputLayer"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "azure", nodes = (1:nrow(nodes_df))[nodes_df$type == "InputLayer"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "cora;", nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cornsilk", nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling2D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "cora;", nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cornsilk", nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling3D"])
-
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "brown1;", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3DTranspose"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "brown1", nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3DTranspose"])
-
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "darkorange;", nodes = (1:nrow(nodes_df))[nodes_df$type == "UpSampling3D"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "darkorange", nodes = (1:nrow(nodes_df))[nodes_df$type == "UpSampling3D"])
-
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "gold;", nodes = (1:nrow(nodes_df))[nodes_df$type == "BatchNormalizationV1"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "beige", nodes = (1:nrow(nodes_df))[nodes_df$type == "BatchNormalizationV1"])
-
-  graph <- DiagrammeR::set_node_attrs(graph, "color", "cyan;", nodes = (1:nrow(nodes_df))[nodes_df$type == "Concatenate"])
-  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cyan", nodes = (1:nrow(nodes_df))[nodes_df$type == "Concatenate"])
-
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "blue",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "skyblue",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "blue",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "skyblue",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "red",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Activation"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "pink",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Activation"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "green",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "aquamarine",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "green",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "aquamarine",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "SpatialDropout3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "black",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "InputLayer"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "azure",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "InputLayer"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "cora;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cornsilk",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling2D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "cora;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cornsilk",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "MaxPooling3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "brown1;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3DTranspose"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "brown1",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Conv3DTranspose"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "darkorange;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "UpSampling3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "darkorange",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "UpSampling3D"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "gold;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "BatchNormalizationV1"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "beige",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "BatchNormalizationV1"])
+  graph <- DiagrammeR::set_node_attrs(graph, "color", "cyan;",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Concatenate"])
+  graph <- DiagrammeR::set_node_attrs(graph, "fillcolor", "cyan",
+            nodes = (1:nrow(nodes_df))[nodes_df$type == "Concatenate"])
 
   coords <- local({
     (igraph::layout_with_sugiyama(DiagrammeR::to_igraph(graph)))[[2]] %>%
@@ -154,4 +180,3 @@ plot_model <- function(model, width=4.5, height=1, ...){
   DiagrammeR::render_graph(graph, layout="dot")
 
 }
-

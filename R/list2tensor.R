@@ -18,20 +18,14 @@
 ##' new_conv_dim1, new_conv_dim2 and new_conv_dim3 values might have changed due to padding.
 ##'
 ##' @title Data conversion of list to tensor.
+##' @usage list2tensor(xList)
 ##' @param xList list data of 3D array
-##' @param yList list data of 4D array.
-##' @return 4D/5D Array.
+##' @return 4D Array.
 ##' @author Satoshi Kume
 ##' @export list2tensor
-##' @export list3tensor
-##' @export list4tensor
 ##' @examples \dontrun{
 ##'
 ##' Res2 <- list2tensor(xList)
-##'
-##' Res3 <- list3tensor(yList)
-##'
-##' Res4 <- list4tensor(yList)
 ##'
 ##' }
 
@@ -40,10 +34,34 @@ list2tensor <- function(xList) {
   aperm(xTensor, c(4, 1, 2, 3))
 }
 
+##' @title Data conversion of list to tensor.
+##' @usage list3tensor(yList)
+##' @param yList list data of 4D array.
+##' @return 5D Array.
+##' @author Satoshi Kume
+##' @export list3tensor
+##' @examples \dontrun{
+##'
+##' Res3 <- list3tensor(yList)
+##'
+##' }
+
 list3tensor <- function(yList) {
   xTensor <- simplify2array(yList)
   aperm(xTensor, c(1, 2, 3, 5, 4))
 }
+
+##' @title Data conversion of list to tensor.
+##' @usage list4tensor(yList)
+##' @param yList list data of 4D array.
+##' @return 5D Array.
+##' @author Satoshi Kume
+##' @export list4tensor
+##' @examples \dontrun{
+##'
+##' Res4 <- list4tensor(yList)
+##'
+##' }
 
 list4tensor <- function(yList) {
   xTensor <- simplify2array(yList)
