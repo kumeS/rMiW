@@ -1,4 +1,4 @@
-# rMiW - R package for image analysis workflow for microscopy image using deep learning
+# rMiW - R package for Microscopy image analysis Workflow using machine learning
 
 A rMiW package in R is going to provide features including image processing, dimensionality reduction analysis and segmentation tools for bio-images.
 
@@ -38,12 +38,13 @@ Training data: human CT lung data
 
 
 ## License
-This work is released under a
-[Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US)
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+
+Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http://www.perlfoundation.org/artistic_license_2_0).
+
+## Citation
 
 If any scientific publications derive from this project, you must cite:
 Scientific paper is under preparation.
 
 ## Authors/Contact
-- [Satoshi Kume](mailto:satoshi.kume@riken.jp)
+- [Satoshi Kume](mailto:satoshi.kume.19843@gmail.com)
