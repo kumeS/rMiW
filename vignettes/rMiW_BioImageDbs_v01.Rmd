@@ -1,12 +1,9 @@
 ---
-title: "rMiW: R package for image analysis workflow for microscopy images"
+title: "rMiW & BioImageDbs to provide an analytical workflow for microscopy-based images"
 author: 
 - name: Satoshi Kume
-  affiliation:
-  - RIKEN Center for Biosystems Dynamics Research
-  - Osaka City University Center for Health Science Innovation
-  - Osaka Electro-Communication University
   email: satoshi.kume.1984@gmail.com
+- name: Kozo Nishida
 date: "`r Sys.Date()`"
 graphics: no
 package: knitr, magick
@@ -15,20 +12,27 @@ output:
         toc_float: true
 vignette: >
     %\VignetteIndexEntry{rMiW}
-    %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r style, echo = FALSE, results = 'asis', message=FALSE}
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_BioImageDbs_v01.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Introduction
 
-```{ r }
+
+
+
+```{r}
+library(rMiW)
+library(BioImageDbs)
 
 ```
 

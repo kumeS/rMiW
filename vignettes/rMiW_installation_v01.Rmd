@@ -1,0 +1,69 @@
+---
+title: "Introduction to rMiW package for the installation"
+author: 
+- name: Satoshi Kume
+  email: satoshi.kume.1984@gmail.com
+date: "`r Sys.Date()`"
+graphics: no
+package: knitr, magick
+output:
+    BiocStyle::html_document:
+        toc_float: true
+vignette: >
+    %\VignetteIndexEntry{rMiW}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+**Last modified:** `r file.info("rMiW_installation_v01.Rmd")$mtime`<br />
+**Compiled**: `r date()`
+
+# Getting started
+
+`r Rpackage("rMiW")` is a R package distributed in kumeS's GitHub site.
+
+To install the package, start R and enter:
+
+```{r installation, echo=TRUE, eval=FALSE}
+#Check for the installation (30 June 2021)
+install.packages( "devtools" )
+devtools::install_github( "kumeS/rMiW" )
+library( "rMiW" )
+
+```
+
+In addition, you want to install an ExperimentHub package 
+`r Rpackage("BioImageDbs")` from Bioconductor.
+
+```{r}
+#Check for the installation (30 June 2021)
+install.packages("BiocManager")
+BiocManager::install("ExperimentHub", force = TRUE)
+BiocManager::install("BioImageDbs", force = TRUE)
+
+#Load
+library(ExperimentHub)
+library(BioImageDbs)
+
+```
+
+# Optional setting at OECU
+
+Run the following commands in the R console.
+
+```{r}
+#Proxy setting at OECU
+if(T){
+proxy_url = "http://wwwproxy.osakac.ac.jp:8080"
+Sys.setenv("http_proxy" = proxy_url)
+Sys.setenv("https_proxy" = proxy_url)
+Sys.setenv("ftp_proxy" = proxy_url)
+}
+
+```
