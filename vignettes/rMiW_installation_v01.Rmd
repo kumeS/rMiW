@@ -30,7 +30,7 @@ BiocStyle::markdown()
 
 To install the package, start R and enter:
 
-```{r installation, echo=TRUE, eval=FALSE}
+```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
 install.packages( "devtools" )
 devtools::install_github( "kumeS/rMiW" )
@@ -41,7 +41,7 @@ library( "rMiW" )
 In addition, you want to install an ExperimentHub package 
 `r Rpackage("BioImageDbs")` from Bioconductor.
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
 install.packages("BiocManager")
 BiocManager::install("ExperimentHub", force = TRUE)
@@ -57,7 +57,7 @@ library(BioImageDbs)
 
 Run the following commands in the R console.
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 #Proxy setting at OECU
 if(T){
 proxy_url = "http://wwwproxy.osakac.ac.jp:8080"
