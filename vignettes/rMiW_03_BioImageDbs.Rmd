@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 1. Providing an analytical workflow for microscopy-based images"
+title: "rMiW: 2. rMiW & BioImageDbs to provide an analytical workflow for microscopy-based images and deep learning"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
@@ -22,19 +22,30 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_BioImageDbs.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_03_BioImageDbs.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
 library(rMiW)
+library(ExperimentHub)
+library(BioImageDbs)
 ```
 
-# Import image from rMiW
+# Download 2D image dataset via BioImageDbs
+
+```{r echo=TRUE, eval=FALSE}
+library(rMiW)
+library(ExperimentHub)
+library(BioImageDbs)
+```
 
 
 
 
+# Session information {.unnumbered}
 
-
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```

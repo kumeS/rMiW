@@ -27,7 +27,7 @@ devtools::install_github("rMiW")
 
 ## Tutrial
 
-- [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
+- [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_01_installation.html)
 
 
 
