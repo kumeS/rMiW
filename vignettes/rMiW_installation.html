@@ -265,20 +265,20 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-07-05 12:28:22<br />
-<strong>Compiled</strong>: Mon Jul 5 12:28:59 2021</p>
+<p><strong>Last modified:</strong> 2021-07-05 12:33:47<br />
+<strong>Compiled</strong>: Mon Jul 5 12:33:53 2021</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <p><em>rMiW</em> is a R package distributed in kumeS’s GitHub site.</p>
 <p>To install the package, start R and enter:</p>
 <pre class="r"><code>#Check for the installation (30 June 2021)
 install.packages( &quot;devtools&quot; )
-devtools::install_github( &quot;kumeS/rMiW&quot; )
+devtools::install_github( &quot;kumeS/rMiW&quot;, force = TRUE )
 library( &quot;rMiW&quot; )
 
 #if you want to remove the package
 #remove.packages(&quot;rMiW&quot;, lib=.libPaths())</code></pre>
-<p>In addition, you want to install an ExperimentHub package
+<p>In addition, you also need to install an ExperimentHub package and
 <em>BioImageDbs</em> from Bioconductor.</p>
 <pre class="r"><code>#Check for the installation (30 June 2021)
 install.packages(&quot;BiocManager&quot;)
@@ -299,6 +299,34 @@ Sys.setenv(&quot;http_proxy&quot; = proxy_url)
 Sys.setenv(&quot;https_proxy&quot; = proxy_url)
 Sys.setenv(&quot;ftp_proxy&quot; = proxy_url)
 }</code></pre>
+</div>
+<div id="session-information" class="section level1 unnumbered">
+<h1>Session information</h1>
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] ja_JP.UTF-8/ja_JP.UTF-8/ja_JP.UTF-8/C/ja_JP.UTF-8/ja_JP.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] BiocStyle_2.20.2
+## 
+## loaded via a namespace (and not attached):
+##  [1] bookdown_0.22       digest_0.6.27       R6_2.5.0           
+##  [4] jsonlite_1.7.2      magrittr_2.0.1      evaluate_0.14      
+##  [7] stringi_1.6.2       rlang_0.4.11        jquerylib_0.1.4    
+## [10] bslib_0.2.5.1       rmarkdown_2.9       tools_4.1.0        
+## [13] stringr_1.4.0       xfun_0.24           yaml_2.2.1         
+## [16] compiler_4.1.0      BiocManager_1.30.16 htmltools_0.5.1.1  
+## [19] knitr_1.33          sass_0.4.0</code></pre>
 </div>
 
 

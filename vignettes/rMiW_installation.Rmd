@@ -34,7 +34,7 @@ To install the package, start R and enter:
 ```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
 install.packages( "devtools" )
-devtools::install_github( "kumeS/rMiW" )
+devtools::install_github( "kumeS/rMiW", force = TRUE )
 library( "rMiW" )
 
 #if you want to remove the package
@@ -42,7 +42,7 @@ library( "rMiW" )
 
 ```
 
-In addition, you want to install an ExperimentHub package 
+In addition, you also need to install an ExperimentHub package and 
 `r Rpackage("BioImageDbs")` from Bioconductor.
 
 ```{r echo=TRUE, eval=FALSE}
