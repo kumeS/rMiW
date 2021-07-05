@@ -35,7 +35,7 @@ To install the package, start R and enter:
 #Check for the installation (30 June 2021)
 install.packages( "devtools" )
 devtools::install_github( "kumeS/rMiW", force = TRUE )
-library( "rMiW" )
+library(rMiW)
 
 #if you want to remove the package
 #remove.packages("rMiW", lib=.libPaths())
@@ -47,7 +47,7 @@ In addition, you also need to install an ExperimentHub package and
 
 ```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
-install.packages("BiocManager")
+#install.packages("BiocManager")
 BiocManager::install("ExperimentHub", force = TRUE)
 BiocManager::install("BioImageDbs", force = TRUE)
 

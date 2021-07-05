@@ -30,6 +30,7 @@ devtools::install_github("rMiW")
 - [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
 
 
+
 ## License
 
 Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http://www.perlfoundation.org/artistic_license_2_0).
