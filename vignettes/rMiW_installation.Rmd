@@ -57,7 +57,7 @@ library(BioImageDbs)
 
 ```
 
-# Optional setting at OECU
+# Optional proxy setting at OECU
 
 Run the following commands in the R console.
 

@@ -265,8 +265,8 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-07-05 12:33:47<br />
-<strong>Compiled</strong>: Mon Jul 5 12:33:53 2021</p>
+<p><strong>Last modified:</strong> 2021-07-05 12:48:34<br />
+<strong>Compiled</strong>: Mon Jul 5 12:48:36 2021</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <p><em>rMiW</em> is a R package distributed in kumeS’s GitHub site.</p>
@@ -274,14 +274,14 @@ document.addEventListener("DOMContentLoaded", function() {
 <pre class="r"><code>#Check for the installation (30 June 2021)
 install.packages( &quot;devtools&quot; )
 devtools::install_github( &quot;kumeS/rMiW&quot;, force = TRUE )
-library( &quot;rMiW&quot; )
+library(rMiW)
 
 #if you want to remove the package
 #remove.packages(&quot;rMiW&quot;, lib=.libPaths())</code></pre>
 <p>In addition, you also need to install an ExperimentHub package and
 <em>BioImageDbs</em> from Bioconductor.</p>
 <pre class="r"><code>#Check for the installation (30 June 2021)
-install.packages(&quot;BiocManager&quot;)
+#install.packages(&quot;BiocManager&quot;)
 BiocManager::install(&quot;ExperimentHub&quot;, force = TRUE)
 BiocManager::install(&quot;BioImageDbs&quot;, force = TRUE)
 
@@ -289,8 +289,8 @@ BiocManager::install(&quot;BioImageDbs&quot;, force = TRUE)
 library(ExperimentHub)
 library(BioImageDbs)</code></pre>
 </div>
-<div id="optional-setting-at-oecu" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Optional setting at OECU</h1>
+<div id="optional-proxy-setting-at-oecu" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Optional proxy setting at OECU</h1>
 <p>Run the following commands in the R console.</p>
 <pre class="r"><code>#Proxy setting at OECU
 if(T){
