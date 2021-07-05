@@ -22,7 +22,7 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_01_installation.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_installation.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Getting started

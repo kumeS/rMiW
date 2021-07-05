@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 2. rMiW & BioImageDbs to provide an analytical workflow for microscopy-based images and deep learning"
+title: "rMiW: 02. rMiW & BioImageDbs to provide an analytical workflow for microscopy-based images and deep learning"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
@@ -22,7 +22,7 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_03_BioImageDbs.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_02_BioImageDbs.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Getting started

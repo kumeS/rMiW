@@ -27,8 +27,7 @@ devtools::install_github("rMiW")
 
 ## Tutrial
 
-- [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_01_installation.html)
-
+- [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
 
 
 ## License
@@ -38,10 +37,12 @@ Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http:/
 ## Cite
 
 If any scientific publications derive from this project, you must cite:
+
 Scientific paper is under preparation.
 
 ## Authors
 
 - Satoshi Kume
+
 - Kozo Nishida
 

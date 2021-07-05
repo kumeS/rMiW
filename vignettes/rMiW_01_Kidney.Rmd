@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 1. Providing an analytical workflow for microscopy-based images"
+title: "rMiW: 01. Providing an analytical workflow for microscopy-based images"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
@@ -22,7 +22,7 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_02_Kidney.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_01_Kidney.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Getting started
