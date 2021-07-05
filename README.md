@@ -1,5 +1,6 @@
 # rMiW
-R package for image analysis workflow for microscopy image using deep learning
+
+A R package for the image analytical workflow for microscopy-based images and deep learning
 
 ## Topics/Keywords of this project
 - R language usage
@@ -11,38 +12,30 @@ R package for image analysis workflow for microscopy image using deep learning
 - Post-DL image processing (Future plan)
 - Multivariate analysis of cell image features (Future plan)
 
-## Image dataset
-
-
-
-## Installation of Dependent Packages
-```r
-# CRAN
-install.packages(c("", ""),
-    repos="http://cran.r-project.org")
-```
-
 ## Installation
+
+1. Start R.app
+
+2. Run the following commands in the R console.
+
 ```r
 install.packages("devtools", repos="http://cran.r-project.org")
-library(devtools)
-devtools::install_github("XXXX")
+
+devtools::install_github("rMiW")
+
 ```
 
-## Sample usage
-## DL workflow
-
-* 1. 
-Training data: human CT lung data
-
-
 ## License
-This work is released under a
-[Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US)
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+
+Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http://www.perlfoundation.org/artistic_license_2_0).
+
+## Cite
 
 If any scientific publications derive from this project, you must cite:
 Scientific paper is under preparation.
 
-## Authors/Contact
-- [Satoshi Kume](mailto:satoshi.kume@riken.jp)
+## Authors
+
+- Satoshi Kume
+- Kozo Nishida
+

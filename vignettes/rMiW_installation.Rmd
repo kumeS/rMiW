@@ -37,6 +37,9 @@ install.packages( "devtools" )
 devtools::install_github( "kumeS/rMiW" )
 library( "rMiW" )
 
+#if you want to remove the package
+#remove.packages("rMiW", lib=.libPaths())
+
 ```
 
 In addition, you want to install an ExperimentHub package 
@@ -68,3 +71,9 @@ Sys.setenv("ftp_proxy" = proxy_url)
 }
 
 ```
+
+# Session information {.unnumbered}
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
