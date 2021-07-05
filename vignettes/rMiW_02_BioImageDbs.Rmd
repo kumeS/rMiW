@@ -36,9 +36,22 @@ library(BioImageDbs)
 # Download 2D image dataset via BioImageDbs
 
 ```{r echo=TRUE, eval=FALSE}
-library(rMiW)
-library(ExperimentHub)
-library(BioImageDbs)
+#Set EH
+eh <- ExperimentHub()
+
+#Query
+(qr0 <- query(eh, c("BioImageDbs", "LM_id0001")))
+(qr1 <- query(eh, c("BioImageDbs", "LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary")))
+
+#LM_id0001
+N <- 1
+qr1[N]
+str(qr1[N])
+
+#Data download
+ImgData <- qr1[[N]]
+str(ImgData)
+
 ```
 
 
