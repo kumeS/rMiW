@@ -2,32 +2,25 @@
 
 ## Topics/Keywords of this project
 - R language usage
-- Keras/Tensorflow in R
-- Deep learning (DL) for image analysis
+- Keras/Tensorflow usage in R
+- Deep learning (DL) models for image analysis
 - Microscopy images, especially electron microscopy images
+- Image pre-processing (read, display, and resize etc)
+- Integrated usage with BioImageDBs
 - Image segmentation for 2D/3D  images using DL
 
-  - (Future plan)
+  - Future plan
     - Object recognition for microscopy images
     - Post-DL image processing
     - Multivariate analysis of cell image features
 
-## Installation
-
-1. Start R.app
-
-2. Run the following commands in the R console.
-
-```r
-install.packages("devtools", repos="http://cran.r-project.org")
-
-devtools::install_github("rMiW")
-
-```
-
-## Tutrial
+## Getting started
 
 - [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
+
+## Tutrials
+
+
 
 
 ## License
@@ -38,7 +31,7 @@ Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http:/
 
 If any scientific publications derive from this project, you must cite:
 
-Scientific paper is under preparation.
+*Scientific paper is under preparation.*
 
 ## Authors
 

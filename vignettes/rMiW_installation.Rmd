@@ -25,16 +25,22 @@ BiocStyle::markdown()
 **Last modified:** `r file.info("rMiW_installation.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
+Currently, `r Rpackage("rMiW")` is a R package distributed in kumeS's GitHub site.
+
 # Getting started
 
-`r Rpackage("rMiW")` is a R package distributed in kumeS's GitHub site.
+1. Start R.app
 
-To install the package, start R and enter:
+2. Enter the following commands in the R console .
 
 ```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
-install.packages( "devtools" )
+
+#Install
+install.packages( "devtools" , repos="http://cran.r-project.org")
 devtools::install_github( "kumeS/rMiW", force = TRUE )
+
+#Load
 library(rMiW)
 
 #if you want to remove the package
@@ -48,6 +54,8 @@ In addition, you also need to install an ExperimentHub package and
 ```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
 #install.packages("BiocManager")
+
+#Install
 BiocManager::install("ExperimentHub", force = TRUE)
 BiocManager::install("BioImageDbs", force = TRUE)
 
