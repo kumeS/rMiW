@@ -3,7 +3,6 @@ title: "rMiW: 02. rMiW & BioImageDbs to provide an analytical workflow for micro
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
-- name: Kozo Nishida
 date: "`r Sys.Date()`"
 graphics: no
 package: knitr, magick

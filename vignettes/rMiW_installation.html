@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2021-07-05" />
+<meta name="date" content="2021-07-07" />
 
 <title>rMiW: An installation of the related packages</title>
 
@@ -245,7 +245,7 @@ function toggle_visibility(id1) {
 <h1 class="title toc-ignore">rMiW: An installation of the related packages</h1>
 <p class="author-name">Satoshi Kume<span class="affil-mark">*</span> and Kozo Nishida</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:satoshi.kume.1984@gmail.com">satoshi.kume.1984@gmail.com</a></p>
-<h4 class="date">2021-07-05</h4>
+<h4 class="date">2021-07-07</h4>
 <h4 class="package">Package</h4>
 <p>knitr, magick</p>
 
@@ -265,15 +265,22 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-07-05 12:55:22<br />
-<strong>Compiled</strong>: Mon Jul 5 12:56:19 2021</p>
+<p><strong>Last modified:</strong> 2021-07-07 22:48:17<br />
+<strong>Compiled</strong>: Wed Jul 7 22:49:08 2021</p>
+<p>Currently, <em>rMiW</em> is a R package distributed in kumeS’s GitHub site.</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
-<p><em>rMiW</em> is a R package distributed in kumeS’s GitHub site.</p>
-<p>To install the package, start R and enter:</p>
+<ol style="list-style-type: decimal">
+<li><p>Start R.app</p></li>
+<li><p>Enter the following commands in the R console .</p></li>
+</ol>
 <pre class="r"><code>#Check for the installation (30 June 2021)
-install.packages( &quot;devtools&quot; )
+
+#Install
+install.packages( &quot;devtools&quot; , repos=&quot;http://cran.r-project.org&quot;)
 devtools::install_github( &quot;kumeS/rMiW&quot;, force = TRUE )
+
+#Load
 library(rMiW)
 
 #if you want to remove the package
@@ -282,6 +289,8 @@ library(rMiW)
 <em>BioImageDbs</em> from Bioconductor.</p>
 <pre class="r"><code>#Check for the installation (30 June 2021)
 #install.packages(&quot;BiocManager&quot;)
+
+#Install
 BiocManager::install(&quot;ExperimentHub&quot;, force = TRUE)
 BiocManager::install(&quot;BioImageDbs&quot;, force = TRUE)
 

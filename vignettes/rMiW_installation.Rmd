@@ -3,7 +3,6 @@ title: "rMiW: An installation of the related packages"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
-- name: Kozo Nishida
 date: "`r Sys.Date()`"
 graphics: no
 package: knitr, magick

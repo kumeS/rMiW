@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 01. Providing a basic workflow for microscopy-based images"
+title: "rMiW: 03. Providing a image processing for a whole slide image"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
