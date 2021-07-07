@@ -1,16 +1,16 @@
-# rMiW
-
-A R package for the image analytical workflow for microscopy-based images and deep learning
+# rMiW: A R package for providing workflows for image processing, image analysis and deep learning for microscopy-based images.
 
 ## Topics/Keywords of this project
 - R language usage
 - Keras/Tensorflow in R
-- Deep learning for images
+- Deep learning (DL) for image analysis
 - Microscopy images, especially electron microscopy images
-- Image segmentation for 2D/3D microscopy images
-- Object recognition for microscopy images (Future plan)
-- Post-DL image processing (Future plan)
-- Multivariate analysis of cell image features (Future plan)
+- Image segmentation for 2D/3D  images using DL
+
+  - (Future plan)
+    - Object recognition for microscopy images
+    - Post-DL image processing
+    - Multivariate analysis of cell image features
 
 ## Installation
 
