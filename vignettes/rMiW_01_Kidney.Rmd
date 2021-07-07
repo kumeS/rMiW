@@ -28,6 +28,7 @@ BiocStyle::markdown()
 
 ```{r echo=TRUE, eval=FALSE}
 library(rMiW)
+
 ```
 
 # Import image from rMiW
