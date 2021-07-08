@@ -10,9 +10,14 @@ Authors@R: c(
     comment = c(ORCID = "0000-0001-7481-2843"))
     )
 Maintainer: Satoshi Kume <satoshi.kume.1984@gmail.com>
-Description: test version.
+Description: This package provides a workflow for pre-processing, analysis 
+    and deep learning for microscopy-based images.
 Depends: R (>= 4.1.0)
-Imports: markdown, rmarkdown, keras, EBImage==4.34.0, magick
+Imports: markdown, 
+    rmarkdown, 
+    keras, 
+    EBImage (>= 4.34.0), 
+    magick
 Suggests: roxygen2,
     knitr, 
     BiocStyle,

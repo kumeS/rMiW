@@ -2,7 +2,7 @@
 
 ## Description
 
-This tool provides a workflow for pre-processing, analysis and deep learning for microscopy-based images.
+This package provides a workflow for pre-processing, analysis and deep learning for microscopy-based images.
 
 ## Topics in this project
 - R language usage
