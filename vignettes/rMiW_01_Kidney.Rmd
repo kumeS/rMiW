@@ -31,12 +31,27 @@ library(rMiW)
 
 ```
 
-# Import image from rMiW
+# Import a kidney image from rMiW
+
+The displayed image (`Mouse01_Kid_x20_z0_RR01.png') is an image of whole slide imaging (WSI) for observing the mouse P0 kidney tissue stained by H&E. 
 
 ```{r echo=TRUE, eval=FALSE}
+options(EBImage.display = "raster")
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 
-
+#Visualization
+EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500))
 ```
+
+```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+options(EBImage.display = "raster")
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+img <- EBImage::resize(EBImage::readImage(files = file), w = 500)
+EBImage::display(img)
+```
+
+
+
 
 
 # Session information {.unnumbered}
