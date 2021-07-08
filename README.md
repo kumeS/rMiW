@@ -1,4 +1,4 @@
-# rMiW: A R package for providing a workflow for image analysis
+# rMiW: A R package for providing an image analysis workflow
 
 ## Description
 
