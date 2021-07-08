@@ -1,5 +1,7 @@
 # rMiW: A R package for providing a workflow for image analysis
 
+## Description
+
 This tool provides a workflow for pre-processing, analysis and deep learning for microscopy-based images.
 
 ## Topics in this project
