@@ -36,7 +36,7 @@ Copyright (c) 2021 Satoshi Kume released under the [Artistic License 2.0](http:/
 
 If any scientific publications derive from this project, you must cite:
 
-*Scientific paper is under preparation.*
+**Scientific paper is under preparation.**
 
 ## Authors
 
