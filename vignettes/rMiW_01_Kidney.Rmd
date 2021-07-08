@@ -50,6 +50,7 @@ img <- EBImage::resize(EBImage::readImage(files = file), w = 500)
 EBImage::display(img)
 ```
 
+# Basic image processing
 
 
 

@@ -1,6 +1,6 @@
 Package: rMiW
 Type: Package
-Title: rMiW - R package for image analysis workflow for microscopy image
+Title: rMiW - R package for providing the analysis workflow for microscopy-based images
 Version: 0.99.1
 Encoding: UTF-8
 Authors@R: c(
@@ -9,23 +9,19 @@ Authors@R: c(
     email = "satoshi.kume.1984@gmail.com",
     comment = c(ORCID = "0000-0001-7481-2843"))
     )
-Maintainer: Satoshi Kume <yourself@somewhere.net>
+Maintainer: Satoshi Kume <satoshi.kume.1984@gmail.com>
 Description: test version.
-Depends: R (>= 4.0.0)
-Imports: markdown, rmarkdown, keras
+Depends: R (>= 4.1.0)
+Imports: markdown, rmarkdown, keras, EBImage==4.34.0, magick
 Suggests: roxygen2,
     knitr, 
     BiocStyle,
-    magick, 
     purrr, 
     magrittr, 
     filesstrings, 
     animation,
-    DiagrammeR,
     assertthat,
-    dplyr,
-    glue,
-    igraph
+    dplyr
 VignetteBuilder: knitr
 License: Artistic-2.0
 URL: https://github.com/kumeS/rMiW
