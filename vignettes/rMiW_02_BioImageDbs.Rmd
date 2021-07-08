@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 02. rMiW & BioImageDbs to provide an analytical workflow for microscopy-based images and deep learning"
+title: "rMiW: 02. rMiW & BioImageDbs for a workflow for microscopy-based image analysis and deep learning"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
