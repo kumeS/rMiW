@@ -10,7 +10,7 @@ This tool provides a workflow for pre-processing, analysis and deep learning for
 - Microscopy-based images, especially electron microscopy images
 - Image pre-processing (read, display, and resize etc)
 - Deep learning (DL) models for image analysis
-- Image segmentation for 2D/3D  images using DL
+- Semantic segmentation for 2D/3D  images using DL
 - Integrated usage with [BioImageDBs](https://bioconductor.org/packages/release/data/experiment/html/BioImageDbs.html)
 
   - Future plan
