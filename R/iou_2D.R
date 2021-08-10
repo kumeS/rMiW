@@ -1,33 +1,31 @@
-##' @description visualize a model in Keras
+##' @title 2D IoU (Intersection-Over-Union) for single label
 ##'
-##' @title Create network view for the keras model object.
-##' @param model the model object in Keras.
-##' @param width a plot size of width.
-##' @param height a plot size of height.
-##' @return A plot of the model network.
+##' @usage iou(y_true, y_pred, smooth = 1.0)
+##' @usage iou_loss(y_true, y_pred)
+##'
+##' @param y_true XXX
+##' @param y_pred XXX
+##' @param smooth XXX
+##'
+##' @importFrom keras k_flatten
+##' @importFrom keras k_sum
+##' @importFrom keras loss_binary_crossentropy
+##'
+##' @export iou
+##' @export iou_loss
 ##' @author Satoshi Kume
-##' @export
-##' @examples
-##' \dontrun{
-##' plot_model_modi(model)
-##' }
+##'
 
-
-############################################
-## 2D IoU (Intersection-Over-Union) for single label
-############################################
 iou <- function(y_true, y_pred, smooth = 1.0){
-  y_true_f <- k_flatten(y_true)
-  y_pred_f <- k_flatten(y_pred)
-  intersection <- k_sum( y_true_f * y_pred_f)
-  union <- k_sum( y_true_f + y_pred_f ) - intersection
+  y_true_f <- keras::k_flatten(y_true)
+  y_pred_f <- keras::k_flatten(y_pred)
+  intersection <- keras::k_sum( y_true_f * y_pred_f)
+  union <- keras::k_sum( y_true_f + y_pred_f ) - intersection
   result <- (intersection + smooth) / ( union + smooth)
   return(result)
 }
 
 iou_loss <- function(y_true, y_pred) {
-  result <- loss_binary_crossentropy(y_true, y_pred) + (1 - iou(y_true, y_pred))
+  result <- keras::loss_binary_crossentropy(y_true, y_pred) + (1 - iou(y_true, y_pred))
   return(result)
 }
-
-

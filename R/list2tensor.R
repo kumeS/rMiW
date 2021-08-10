@@ -1,3 +1,5 @@
+##' @title Data conversion of list to tensor.
+##'
 ##' @description Convert list data to 4D/5D array
 ##' # Note below
 ##' # 2D convolution layer (e.g. spatial convolution over images).
@@ -17,7 +19,6 @@
 ##' 5D tensor with shape: (samples, new_conv_dim1, new_conv_dim2, new_conv_dim3, filters) if data_format='channels_last'
 ##' new_conv_dim1, new_conv_dim2 and new_conv_dim3 values might have changed due to padding.
 ##'
-##' @title Data conversion of list to tensor.
 ##' @usage list2tensor(xList)
 ##' @param xList list data of 3D array
 ##' @return 4D Array.
@@ -30,8 +31,8 @@
 ##' }
 
 list2tensor <- function(xList) {
-  xTensor <- simplify2array(xList)
-  aperm(xTensor, c(4, 1, 2, 3))
+  xTensor <- base::simplify2array(xList)
+  base::aperm(xTensor, c(4, 1, 2, 3))
 }
 
 ##' @title Data conversion of list to tensor.
@@ -47,8 +48,8 @@ list2tensor <- function(xList) {
 ##' }
 
 list3tensor <- function(yList) {
-  xTensor <- simplify2array(yList)
-  aperm(xTensor, c(1, 2, 3, 5, 4))
+  xTensor <- base::simplify2array(yList)
+  base::aperm(xTensor, c(1, 2, 3, 5, 4))
 }
 
 ##' @title Data conversion of list to tensor.
@@ -64,8 +65,8 @@ list3tensor <- function(yList) {
 ##' }
 
 list4tensor <- function(yList) {
-  xTensor <- simplify2array(yList)
-  aperm(xTensor, c(5, 1, 2, 3, 4))
+  xTensor <- base::simplify2array(yList)
+  base::aperm(xTensor, c(5, 1, 2, 3, 4))
 }
 
 

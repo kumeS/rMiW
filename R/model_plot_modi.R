@@ -8,8 +8,12 @@
 ##' @param height a plot size of height.
 ##' @return A plot of the model network.
 ##' @author Satoshi Kume
-##' @export
+##'
+##' @import DiagrammeR
+##' @export plot_model_modi
+##'
 ##' @references deepviz (https://github.com/andrie/deepviz)
+##'
 ##' @examples
 ##' \dontrun{
 ##' plot_model_modi(model)
@@ -46,6 +50,7 @@ model_nodes <- function(x){
     activation = l_activation
   )
 }
+
 model_edges_sequential <- function(ndf){
   assert_that(is.data.frame(ndf))
   z <- embed(ndf$id, dimension = 2)

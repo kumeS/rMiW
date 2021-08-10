@@ -2,27 +2,21 @@
 % Please edit documentation in R/iou_2D.R
 \name{iou}
 \alias{iou}
-\title{Create network view for the keras model object.}
+\title{2D IoU (Intersection-Over-Union) for single label}
 \usage{
-iou(y_true, y_pred, smooth = 1)
+iou(y_true, y_pred, smooth = 1.0)
+
+iou_loss(y_true, y_pred)
 }
 \arguments{
-\item{model}{the model object in Keras.}
+\item{y_true}{XXX}
 
-\item{width}{a plot size of width.}
+\item{y_pred}{XXX}
 
-\item{height}{a plot size of height.}
-}
-\value{
-A plot of the model network.
+\item{smooth}{XXX}
 }
 \description{
-visualize a model in Keras
-}
-\examples{
-\dontrun{
-plot_model_modi(model)
-}
+2D IoU (Intersection-Over-Union) for single label
 }
 \author{
 Satoshi Kume
