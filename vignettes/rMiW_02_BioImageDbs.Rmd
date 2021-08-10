@@ -5,10 +5,10 @@ author:
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: knitr, magick
+package: rMiW
 output:
     BiocStyle::html_document:
-        toc_float: true
+        toc_float: false
 vignette: >
     %\VignetteIndexEntry{rMiW}
     %\VignetteEncoding{UTF-8}
@@ -27,9 +27,15 @@ BiocStyle::markdown()
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
-library(rMiW)
+#Install
+BiocManager::install("ExperimentHub", force = TRUE)
+BiocManager::install("BioImageDbs", force = TRUE)
+devtools::install_github( "kumeS/rMiW", force = TRUE )
+
+#Load
 library(ExperimentHub)
 library(BioImageDbs)
+library(rMiW)
 ```
 
 # Download 2D image dataset via BioImageDbs
@@ -47,14 +53,23 @@ N <- 1
 qr1[N]
 str(qr1[N])
 
-#Data download
+#Download the dataset of LM_id0001
 ImgData <- qr1[[N]]
 str(ImgData)
 
+#Gif animation
+N <- 2
+GifData <- qr1[[N]]
+
+#view
+magick::image_read(GifData)
 ```
 
+```{r}
 
 
+
+```
 
 # Session information {.unnumbered}
 

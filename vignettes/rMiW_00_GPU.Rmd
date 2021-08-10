@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 03. Providing a image processing for a whole slide image"
+title: "Checking the GPU condition on CnetOS7"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
@@ -8,8 +8,9 @@ graphics: no
 package: rMiW
 output:
     BiocStyle::html_document:
-        toc_float: true
+        toc_float: false
 vignette: >
+    %\VignetteIndexEntry{Checking the GPU condition on CnetOS7}
     %\VignetteIndexEntry{rMiW}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
@@ -21,27 +22,30 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_01_Kidney.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_GPU.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
-# Getting started
+Run the following commands after the installation of CUDA on CentOS.
+
+# Check the package version
 
 ```{r echo=TRUE, eval=FALSE}
-library(rMiW)
-```
-
-# Import image from rMiW
-
-```{r echo=TRUE, eval=FALSE}
-
-
+packageVersion("keras")
+packageVersion("tensorflow")
 
 ```
 
+# Check the GPU conditions
+
+```{r echo=TRUE, eval=FALSE}
+system("nvidia-smi")
+
+system("lspci | grep -i nvidia")
+system("nvidia-smi -l")
+system("nvidia-smi dmon -s pu -d 5")
+```
 
 # Session information {.unnumbered}
-
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
-

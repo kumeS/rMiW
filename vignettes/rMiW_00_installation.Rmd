@@ -1,14 +1,14 @@
 ---
-title: "rMiW: An installation of the related packages"
+title: "The installation of rMiW and the related packages"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: knitr, magick
+package: rMiW
 output:
     BiocStyle::html_document:
-        toc_float: true
+        toc_float: false
 vignette: >
     %\VignetteIndexEntry{rMiW}
     %\VignetteEncoding{UTF-8}
@@ -24,7 +24,7 @@ BiocStyle::markdown()
 **Last modified:** `r file.info("rMiW_installation.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
-Currently, `r Rpackage("rMiW")` is a R package distributed in kumeS's GitHub site.
+Currently, `r Rpackage("rMiW")` is a R package distributed in [kumeS's GitHub site](https://github.com/kumeS/rMiW).
 
 # Getting started
 

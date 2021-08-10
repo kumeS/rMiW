@@ -5,10 +5,10 @@ author:
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: knitr, magick
+package: rMiW
 output:
     BiocStyle::html_document:
-        toc_float: true
+        toc_float: false
 vignette: >
     %\VignetteIndexEntry{rMiW}
     %\VignetteEncoding{UTF-8}

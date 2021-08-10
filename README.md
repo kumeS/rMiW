@@ -5,7 +5,7 @@
 This package provides a workflow for pre-processing, analysis and deep learning for microscopy-based images.
 
 ## Topics in this project
-- R language usage
+- R language usage / Bioconductor
 - Keras/Tensorflow usage in R
 - Microscopy-based images, especially electron microscopy images
 - Image pre-processing (read, display, and resize etc)
@@ -20,7 +20,9 @@ This package provides a workflow for pre-processing, analysis and deep learning 
 
 ## Getting started
 
-- [rMiW: An installation of the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
+- [The installation of rMiW and the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
+
+-[Checking the GPU condition on CnetOS7](https://kumes.github.io/rMiW/vignettes/rMiW_GPU.html)
 
 ## Tutrials
 
