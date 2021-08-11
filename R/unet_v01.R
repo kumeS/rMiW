@@ -4,20 +4,24 @@
 
 unet(shape, nlevels = 3, nfilters = 16)
 
-unet_layer <- function(object, filters, kernel_size = c(FLAGS$kernel_size, FLAGS$kernel_size),
+unet_layer <- function(object, filters,
                        padding = "same", kernel_initializer = "he_normal",
-                       dropout = 0.1, activation="relu"){
+                       dropout = 0.1){
+
+#Parameters
+kernel_size = c(3, 3)
+
 object %>%
   layer_conv_2d(filters = filters, kernel_size = c(3,3), padding = padding) %>%
   layer_batch_normalization() %>%
-  layer_activation(activation) %>%
+  layer_activation(activation="relu") %>%
   layer_conv_2d(filters = filters, kernel_size = c(3,3), padding = padding) %>%
   layer_batch_normalization() %>%
-  layer_activation(activation) %>%
+  layer_activation(activation="relu") %>%
   layer_spatial_dropout_2d(rate = dropout) %>%
   layer_conv_2d(filters = filters, kernel_size = c(3,3), padding = padding) %>%
   layer_batch_normalization() %>%
-  layer_activation(activation)
+  layer_activation(activation="relu")
 
 }
 

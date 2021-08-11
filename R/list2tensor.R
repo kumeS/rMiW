@@ -24,11 +24,7 @@
 ##' @return 4D Array.
 ##' @author Satoshi Kume
 ##' @export list2tensor
-##' @examples \dontrun{
 ##'
-##' Res2 <- list2tensor(xList)
-##'
-##' }
 
 list2tensor <- function(xList) {
   xTensor <- base::simplify2array(xList)
@@ -41,11 +37,7 @@ list2tensor <- function(xList) {
 ##' @return 5D Array.
 ##' @author Satoshi Kume
 ##' @export list3tensor
-##' @examples \dontrun{
 ##'
-##' Res3 <- list3tensor(yList)
-##'
-##' }
 
 list3tensor <- function(yList) {
   xTensor <- base::simplify2array(yList)
@@ -58,11 +50,7 @@ list3tensor <- function(yList) {
 ##' @return 5D Array.
 ##' @author Satoshi Kume
 ##' @export list4tensor
-##' @examples \dontrun{
 ##'
-##' Res4 <- list4tensor(yList)
-##'
-##' }
 
 list4tensor <- function(yList) {
   xTensor <- base::simplify2array(yList)

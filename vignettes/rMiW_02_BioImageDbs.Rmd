@@ -36,13 +36,17 @@ devtools::install_github( "kumeS/rMiW", force = TRUE )
 library(ExperimentHub)
 library(BioImageDbs)
 library(rMiW)
+
+#Removes all files in a cache file directory
+#install.packages("R.cache")
+R.cache::clearCache("ExperimentHub")
 ```
 
 # Download 2D image dataset via BioImageDbs
 
 ```{r echo=TRUE, eval=FALSE}
 #Set EH
-eh <- ExperimentHub()
+eh <- ExperimentHub::ExperimentHub()
 
 #Query
 (qr0 <- query(eh, c("BioImageDbs", "LM_id0001")))
@@ -65,7 +69,13 @@ GifData <- qr1[[N]]
 magick::image_read(GifData)
 ```
 
+#Create an U-NET-based model
+
 ```{r}
+#
+SHAPE <- dim(ImgData$Train$Train_Original)[-1]
+
+model <- unet(shape = SHAPE, nlevels = 3, nfilters = 16)
 
 
 
