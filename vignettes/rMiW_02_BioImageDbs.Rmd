@@ -72,10 +72,10 @@ magick::image_read(GifData)
 #Create an U-NET-based model
 
 ```{r}
-#
-SHAPE <- dim(ImgData$Train$Train_Original)[-1]
+#Width, Height, Channels
+ImgShape <- dim(ImgData$Train$Train_Original)[-1]
 
-model <- unet(shape = SHAPE, nlevels = 3, nfilters = 16)
+model <- unet(shape = ImgShape, nlevels = 3, nfilters = 16)
 
 
 
