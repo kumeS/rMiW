@@ -4,25 +4,14 @@
 \alias{Singlelabel_3d_dice_coef}
 \title{Create network view for the keras model object.}
 \usage{
-Singlelabel_3d_dice_coef(y_true, y_pred, axis = c(1:3), smooth = 1)
-}
-\arguments{
-\item{model}{the model object in Keras.}
+Singlelabel_3d_dice_coef(y_true, y_pred, axis = c(1:3), smooth = 1.0)
 
-\item{width}{a plot size of width.}
+Singlelabel_3d_bce_dice_loss(y_true, y_pred)
 
-\item{height}{a plot size of height.}
-}
-\value{
-A plot of the model network.
+multilabel_dice_coefficientR(y_true, y_pred, smooth = 1.0)
 }
 \description{
 visualize a model in Keras
-}
-\examples{
-\dontrun{
-plot_model_modi(model)
-}
 }
 \author{
 Satoshi Kume

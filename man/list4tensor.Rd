@@ -15,13 +15,6 @@ list4tensor(yList)
 \description{
 Data conversion of list to tensor.
 }
-\examples{
-\dontrun{
-
-Res4 <- list4tensor(yList)
-
-}
-}
 \author{
 Satoshi Kume
 }

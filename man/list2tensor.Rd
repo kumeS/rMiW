@@ -32,13 +32,6 @@ rows and cols values might have changed due to padding.
 5D tensor with shape: (samples, new_conv_dim1, new_conv_dim2, new_conv_dim3, filters) if data_format='channels_last'
 new_conv_dim1, new_conv_dim2 and new_conv_dim3 values might have changed due to padding.
 }
-\examples{
-\dontrun{
-
-Res2 <- list2tensor(xList)
-
-}
-}
 \author{
 Satoshi Kume
 }

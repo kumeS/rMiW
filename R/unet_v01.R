@@ -1,18 +1,4 @@
-##' @title Provide a layer of 2D U-net model (v01)
-##'
-##' @usage unet_2Dlayer_v01(object,
-##'                         filters,
-##'                         dropout)
-##' @param object
-##' @param filters
-##' @param dropout
-##'
-##' @import keras
-##' @export unet_2Dlayer_v01
-##' @author Satoshi Kume
-##'
-
-unet_2Dlayer_v01 <- function(object, filters, dropout){
+.unet_2Dlayer_v01 <- function(object, filters, dropout){
 
 #Parameters
 Kernel_size <- c(3, 3)
@@ -41,11 +27,6 @@ object %>%
 ##' @import keras
 ##' @export unet2D_v01
 ##' @author Satoshi Kume
-##' @example {
-##'
-##' model <- unet(shape=c(512,512,1), nlevels = 3, nfilters = 16)
-##'
-##' }
 ##'
 
 unet2D_v01 <- function(shape){
@@ -67,7 +48,7 @@ clayers <- clayers_pooled <- list()
 clayers_pooled[[1]] <- keras::layer_input(shape = shape)
 
 for(i in 2:(nlevels+1)) {
-clayers[[i]] <- unet_layer(clayers_pooled[[i - 1]],
+clayers[[i]] <- rMiW:::unet_2Dlayer_v01(clayers_pooled[[i - 1]],
                              filters = filter_sizes[i - 1],
                              dropout = dropouts[i-1])
 
@@ -80,7 +61,7 @@ clayers_pooled[[i]] <- keras::layer_max_pooling_2d(clayers[[i]],
 elayers <- list()
 
 ## center
-elayers[[nlevels + 1]] <- unet_layer(clayers_pooled[[nlevels + 1]],
+elayers[[nlevels + 1]] <- rMiW:::unet_2Dlayer_v01(clayers_pooled[[nlevels + 1]],
                                       filters = filter_sizes[nlevels + 1],
                                       dropout = dropouts[nlevels + 1])
 
@@ -92,7 +73,7 @@ elayers[[i]] <- keras::layer_conv_2d_transpose(elayers[[i+1]],
                                           padding = "same")
 
 elayers[[i]] <- keras::layer_concatenate(list(elayers[[i]], clayers[[i + 1]]), axis = 3)
-elayers[[i]] <- unet_layer(elayers[[i]], filters = filter_sizes[i], dropout = dropouts[i])
+elayers[[i]] <- rMiW:::unet_2Dlayer_v01(elayers[[i]], filters = filter_sizes[i], dropout = dropouts[i])
 
 }
 
@@ -102,3 +83,5 @@ outputs <- keras::layer_conv_2d(elayers[[1]], filters = 1, kernel_size = c(1, 1)
 return(keras::keras_model(inputs = clayers_pooled[[1]], outputs = outputs))
 
 }
+
+

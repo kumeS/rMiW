@@ -9,8 +9,8 @@
 ##' @importFrom keras k_sum
 ##' @importFrom keras k_int_shape
 ##' @importFrom keras k_permute_dimensions
-##' @importFrom keras::k_gather
-##' @importFrom keras::k_flatten
+##' @importFrom keras k_gather
+##' @importFrom keras k_flatten
 ##'
 ##' @author Satoshi Kume
 ##'

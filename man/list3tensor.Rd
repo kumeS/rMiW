@@ -15,13 +15,6 @@ list3tensor(yList)
 \description{
 Data conversion of list to tensor.
 }
-\examples{
-\dontrun{
-
-Res3 <- list3tensor(yList)
-
-}
-}
 \author{
 Satoshi Kume
 }

@@ -27,8 +27,9 @@ BiocStyle::markdown()
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
+#Load package
 library(rMiW)
-
+library(EBImage)
 ```
 
 # Import a kidney image from rMiW
@@ -36,23 +37,227 @@ library(rMiW)
 The displayed image (`Mouse01_Kid_x20_z0_RR01.png') is an image of whole slide imaging (WSI) for observing the mouse P0 kidney tissue stained by H&E. 
 
 ```{r echo=TRUE, eval=FALSE}
-options(EBImage.display = "raster")
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 
 #Visualization
-EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500))
+EBImage::display(EBImage::readImage(files = file), method = "raster")
 ```
 
 ```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
 options(EBImage.display = "raster")
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 img <- EBImage::resize(EBImage::readImage(files = file), w = 500)
-EBImage::display(img)
+EBImage::display(img, method = "raster")
 ```
 
 # Basic image processing
 
+## Convert to the grey image
 
+```{r echo=TRUE, eval=FALSE}
+#Read image
+Img <- EBImage::readImage(files = file)
+
+#Convert to the gray image
+GrayImg <- toGrayScale(Img, mode = "luminance")
+
+#Visualization
+EBImage::display(GrayImg, method = "raster")
+```
+
+```{r Fig002, out.width = '75%', fig.cap = "The gray image of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+img <- rMiW::toGrayScale(EBImage::resize(EBImage::readImage(files = file), w = 500), mode = "luminance")
+EBImage::display(img, method = "raster")
+```
+
+## Resize the image
+
+```{r echo=TRUE, eval=FALSE}
+#1% area size
+Img10 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.1, 0), filter = "bilinear")
+
+#6% area size
+Img25 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.25, 0), filter = "bilinear")
+
+#25% area size
+Img50 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.5, 0), filter = "bilinear")
+
+#50% area size
+Img70 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.707, 0), filter = "bilinear")
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img10, method = "raster")
+text(x = dim(Img10)[1]/20, y = dim(Img10)[2]/10, label = "1% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img25, method = "raster")
+text(x = dim(Img25)[1]/20, y = dim(Img25)[2]/10, label = "6% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img50, method = "raster")
+text(x = dim(Img50)[1]/20, y = dim(Img50)[2]/10, label = "25% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img70, method = "raster")
+text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+```{r Fig003, out.width = '100%', fig.cap = "The resized images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+#Read image
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+Img <- EBImage::readImage(files = file)
+
+#1% area size
+Img10 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.1, 0), filter = "bilinear")
+#6% area size
+Img25 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.25, 0), filter = "bilinear")
+#25% area size
+Img50 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.5, 0), filter = "bilinear")
+#50% area size
+Img70 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.707, 0), filter = "bilinear")
+
+par(mfrow=c(2,2))
+EBImage::display(Img10, method = "raster")
+text(x = dim(Img10)[1]/20, y = dim(Img10)[2]/10, label = "1% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img25, method = "raster")
+text(x = dim(Img25)[1]/20, y = dim(Img25)[2]/10, label = "6% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img50, method = "raster")
+text(x = dim(Img50)[1]/20, y = dim(Img50)[2]/10, label = "25% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img70, method = "raster")
+text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+## Transpose the image
+
+```{r echo=TRUE, eval=FALSE}
+#Transpose the image
+ImgTrans <- EBImage::transpose(Img)
+
+#Flip or flop the image
+Imgflip <- EBImage::flip(Img)
+Imgflop <- EBImage::flop(Img)
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img, method = "raster")
+text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(ImgTrans, method = "raster")
+text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflip, method = "raster")
+text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflop, method = "raster")
+text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+```{r Fig004, out.width = '100%', fig.cap = "The rotated images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+#Read image
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+Img <- EBImage::readImage(files = file)
+
+#Transpose the image
+ImgTrans <- EBImage::transpose(Img)
+
+#Flip or flop the image
+Imgflip <- EBImage::flip(Img)
+Imgflop <- EBImage::flop(Img)
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img, method = "raster")
+text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(ImgTrans, method = "raster")
+text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflip, method = "raster")
+text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflop, method = "raster")
+text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+# Basic clustering using k-means
+
+k: non, 2, 3, 4
+- 1x1
+- 2x2
+- 5x5
+
+## The clustering with 1x1 tiles
+
+```{r echo=TRUE, eval=FALSE}
+Img <- Img00@.Data[,,-4]
+str(Img)
+
+Img2DClustering <- function(x=Img, Cluster=3, XY=1024){
+
+display(x, method = "raster")
+Img00 <- EBImage::resize(x, w = XY, h = XY, filter="bilinear")
+str(Img01)
+display(Image(Img01, colormode = "color"), method = "raster")
+
+str(Img01)
+a <- matrix(unlist(Img01), nrow = XY*XY)
+str(a)
+
+b <- matrix(a[,1], nrow=XY)
+str(b)
+display(Image(b), method = "raster")
+
+b <- matrix(a[,2], nrow=XY)
+str(b)
+display(Image(b), method = "raster")
+
+b <- matrix(a[,3], nrow=XY)
+str(b)
+display(Image(b), method = "raster")
+
+
+y <- kmeans(a, centers=Cluster, iter.max = 1000, 
+       nstart = 1,algorithm = "Hartigan-Wong")
+
+d <- matrix(y$cluster, nrow=XY)
+str(d)
+range(d)
+rasterImage()
+display(Image(d/max(d)), method = "raster")
+
+d[d == 1] <- "grey"
+d[d == 2] <- "green"
+d[d == 3] <- "red"
+
+plot(0:5+0.5, 0:5+0.5, type="n")
+rasterImage(d, 0.5, 0.5, 5.5, 5.5, interpolate=FALSE)
+
+for(n in 1:nrow(xy1)){
+  #n <-1
+  v <- col2rgb(rainbow(10)[xy1[n,1] + 1]) / 255
+  img = channel(xtrain[n,,], 'rgb')
+  img[,,1] <- img[,,1]*v[1]
+  img[,,2] <- img[,,2]*v[2]
+  img[,,3] <- img[,,3]*v[3]
+  ff <- t(as.raster(img))
+  ff[ff == "#000000"] <- "#00000000"
+  
+  
+  
+
+
+}
+
+
+
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img, method = "raster")
+text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(ImgTrans, method = "raster")
+text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflip, method = "raster")
+text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflop, method = "raster")
+text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+
+## The clustering with 2x2 tiles
+
+
+## The clustering with 5x5 tiles
 
 
 # Session information {.unnumbered}
@@ -60,4 +265,6 @@ EBImage::display(img)
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
+
+
 

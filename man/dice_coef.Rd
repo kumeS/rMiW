@@ -8,6 +8,13 @@ dice_coef(y_true, y_pred, smooth = 1.0)
 
 bce_dice_loss(y_true, y_pred)
 }
+\arguments{
+\item{y_true}{XXX}
+
+\item{y_pred}{XXX}
+
+\item{smooth}{XXX}
+}
 \description{
 Dice coefficient and loss function for the compile of model.
 }
