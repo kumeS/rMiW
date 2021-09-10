@@ -55,8 +55,9 @@ EBImage::display(img, method = "raster")
 ## Convert to the grey image
 
 ```{r echo=TRUE, eval=FALSE}
-#Read image
+#Read image: delete the 4th element of 3th dimension
 Img <- EBImage::readImage(files = file)
+Img <- EBImage::Image(Img@.Data[,,-4])
 
 #Convert to the gray image
 GrayImg <- toGrayScale(Img, mode = "luminance")
@@ -179,79 +180,26 @@ k: non, 2, 3, 4
 ## The clustering with 1x1 tiles
 
 ```{r echo=TRUE, eval=FALSE}
-Img <- Img00@.Data[,,-4]
-str(Img)
+#Read image: delete the 4th element of 3th dimension
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+Img <- EBImage::readImage(files = file)
+Img <- EBImage::Image(Img@.Data[,,-4])
 
-Img2DClustering <- function(x=Img, Cluster=3, XY=1024){
+#Resize 1024x1024 and perform 3 clustering 
+ImgClus <- Img2DClustering(x=Img, Cluster = 3)
+#Visualize as a gray image
+EBImage::display(EBImage::Image(ImgClus), method = "browser")
+#Visualize as a color image
+rasterMiW(ImgClus)
 
-display(x, method = "raster")
-Img00 <- EBImage::resize(x, w = XY, h = XY, filter="bilinear")
-str(Img01)
-display(Image(Img01, colormode = "color"), method = "raster")
+#Resize 1024x1024 and perform 4 clustering 
+ImgClus <- Img2DClustering(x=Img, Cluster = 4)
+#Visualize as a color image
+rasterMiW(ImgClus)
 
-str(Img01)
-a <- matrix(unlist(Img01), nrow = XY*XY)
-str(a)
-
-b <- matrix(a[,1], nrow=XY)
-str(b)
-display(Image(b), method = "raster")
-
-b <- matrix(a[,2], nrow=XY)
-str(b)
-display(Image(b), method = "raster")
-
-b <- matrix(a[,3], nrow=XY)
-str(b)
-display(Image(b), method = "raster")
-
-
-y <- kmeans(a, centers=Cluster, iter.max = 1000, 
-       nstart = 1,algorithm = "Hartigan-Wong")
-
-d <- matrix(y$cluster, nrow=XY)
-str(d)
-range(d)
-rasterImage()
-display(Image(d/max(d)), method = "raster")
-
-d[d == 1] <- "grey"
-d[d == 2] <- "green"
-d[d == 3] <- "red"
-
-plot(0:5+0.5, 0:5+0.5, type="n")
-rasterImage(d, 0.5, 0.5, 5.5, 5.5, interpolate=FALSE)
-
-for(n in 1:nrow(xy1)){
-  #n <-1
-  v <- col2rgb(rainbow(10)[xy1[n,1] + 1]) / 255
-  img = channel(xtrain[n,,], 'rgb')
-  img[,,1] <- img[,,1]*v[1]
-  img[,,2] <- img[,,2]*v[2]
-  img[,,3] <- img[,,3]*v[3]
-  ff <- t(as.raster(img))
-  ff[ff == "#000000"] <- "#00000000"
-  
-  
-  
-
-
-}
-
-
-
-
-#Visualization
-par(mfrow=c(2,2))
-EBImage::display(Img, method = "raster")
-text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
-EBImage::display(ImgTrans, method = "raster")
-text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
-EBImage::display(Imgflip, method = "raster")
-text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
-EBImage::display(Imgflop, method = "raster")
-text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
 ```
+
+
 
 
 ## The clustering with 2x2 tiles
