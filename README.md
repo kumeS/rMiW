@@ -22,7 +22,7 @@ This package provides a workflow for pre-processing, analysis and deep learning 
 
 - [The installation of rMiW and the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
 
--[Checking the GPU condition on CnetOS7](https://kumes.github.io/rMiW/vignettes/rMiW_GPU.html)
+- [Checking the GPU condition on CnetOS7](https://kumes.github.io/rMiW/vignettes/rMiW_GPU.html)
 
 ## Tutrials
 
@@ -46,5 +46,4 @@ If any scientific publications derive from this project, you must cite:
 
 - Satoshi Kume
 
-- Kozo Nishida
 
