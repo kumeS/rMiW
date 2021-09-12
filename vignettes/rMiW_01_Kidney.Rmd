@@ -172,12 +172,7 @@ text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0
 
 # Basic clustering using k-means
 
-k: non, 2, 3, 4
-- 1x1
-- 2x2
-- 5x5
-
-## The clustering with 1x1 tiles
+## The clustering with a compressed image of 1024x1024px 
 
 ```{r echo=TRUE, eval=FALSE}
 #Read image: delete the 4th element of 3th dimension
@@ -186,20 +181,25 @@ Img <- EBImage::readImage(files = file)
 Img <- EBImage::Image(Img@.Data[,,-4])
 
 #Resize 1024x1024 and perform 3 clustering 
-ImgClus <- Img2DClustering(x=Img, Cluster = 3)
+ImgClus <- Img2DClustering(x=Img, Cluster = 3, XY=1024)
 #Visualize as a gray image
 EBImage::display(EBImage::Image(ImgClus), method = "browser")
 #Visualize as a color image
 rasterMiW(ImgClus)
 
 #Resize 1024x1024 and perform 4 clustering 
-ImgClus <- Img2DClustering(x=Img, Cluster = 4)
+ImgClus <- Img2DClustering(x=Img, Cluster = 4, XY=1024)
 #Visualize as a color image
 rasterMiW(ImgClus)
 
 ```
 
+## The clustering with a compressed image of 512x5124px
 
+```{r}
+
+
+```
 
 
 ## The clustering with 2x2 tiles

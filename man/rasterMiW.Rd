@@ -4,7 +4,10 @@
 \alias{rasterMiW}
 \title{rasterMiW: display as a raster image}
 \usage{
-rasterMiW(x)
+rasterMiW(x, c = 75)
+}
+\arguments{
+\item{c}{chroma value in the HCL color description.}
 }
 \description{
 rasterMiW: display as a raster image
