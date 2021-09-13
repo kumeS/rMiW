@@ -15,7 +15,7 @@ Description: This package provides a workflow for pre-processing, analysis
 Depends: R (>= 4.1.0)
 Imports: markdown, 
     rmarkdown, 
-    keras (>=2.6.0), 
+    keras, 
     EBImage (>= 4.34.0), 
     magick
 Suggests: roxygen2,

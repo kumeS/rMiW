@@ -15,7 +15,7 @@
 ##' @importFrom DiagrammeR create_node_df create_edge_df
 ##' @importFrom assertthat assert_that
 ##' @importFrom glue glue
-##' @export plot_model_modi
+##' @export plot_model
 ##'
 ##' @references deepviz (https://github.com/andrie/deepviz)
 ##'
@@ -24,8 +24,7 @@
 ##' plot_model_modi(model)
 ##' }
 
-
-globalVariables(c(".", "V1", "V2", "x"))
+utils::globalVariables(c(".", "V1", "V2", "x"))
 
 `%||%` <- function(x, y) {
   if (is.null(x)) {
@@ -63,7 +62,7 @@ model_nodes <- function(x){
 
 model_edges_sequential <- function(ndf){
   assertthat::assert_that(is.data.frame(ndf))
-  z <- embed(ndf$id, dimension = 2)
+  z <- stats::embed(ndf$id, dimension = 2)
   DiagrammeR::create_edge_df(
     from = z[, 2],
     to = z[, 1]
@@ -100,7 +99,7 @@ model_edges_network <- function(model, ndf){
   z
 }
 is.keras_model <- function(x){
-  inherits(x, "keras.engine.training.Model")
+  base::inherits(x, "keras.engine.training.Model")
 }
 
 is.keras_model_sequential <- function(x){
@@ -181,7 +180,7 @@ plot_model <- function(model, width=4.5, height=1, ...){
 
   coords <- local({
     (igraph::layout_with_sugiyama(DiagrammeR::to_igraph(graph)))[[2]] %>%
-      dplyr::as_tibble() %>%
+      dplyr::as_tibble(.name_repair = "minimal") %>%
       dplyr::rename(
         x = V1,
         y = V2) %>%
