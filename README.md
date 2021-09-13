@@ -20,13 +20,13 @@ This package provides a workflow for pre-processing, analysis and deep learning 
 
 ## Getting started
 
-- [The installation of rMiW and the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_installation.html)
+- [The installation of rMiW and the related packages](https://kumes.github.io/rMiW/vignettes/rMiW_00_installation.html)
 
-- [Checking the GPU condition on CnetOS7](https://kumes.github.io/rMiW/vignettes/rMiW_GPU.html)
+- [Checking the GPU condition on CnetOS7](https://kumes.github.io/rMiW/vignettes/rMiW_00_GPU.html)
 
 ## Tutrials
 
-- [rMiW: 01. Providing a basic workflow for microscopy-based images](https://kumes.github.io/rMiW/vignettes/rMiW_01_Kidney.html)
+- [rMiW: 01. Providing a basic workflow for microscopy-based images](https://kumes.github.io/rMiW/vignettes/rMiW_01_Basic.html)
 
 - [rMiW: 02. rMiW & BioImageDbs for a workflow for microscopy-based image analysis and deep learning](https://kumes.github.io/rMiW/vignettes/rMiW_02_BioImageDbs.html)
 
