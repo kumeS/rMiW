@@ -1,8 +1,8 @@
 ##' @title rasterMiW: display as a raster image
 ##'
-##' @param x
+##' @param res a result of Img2DClustering
 ##' @param c chroma value in the HCL color description.
-##' @param
+##' @param method select "browser" or "raster"
 ##'
 ##' @importFrom EBImage resize
 ##' @importFrom grDevices col2rgb
@@ -11,17 +11,20 @@
 ##' @author Satoshi Kume
 ##'
 
-rasterMiW <- function(x, c=75) {
+rasterMiW <- function(res, c=75, method="raster") {
 
+if(!all(names(res) == c("Original", "Cluster"))){warning("")}
 #x <- ImgClus; str(x)
-x1 <- x
-a <- table(x)
+x1 <- res$Cluster
+x <- res$Cluster
+y <- res$Original
+a <- table(res$Cluster)
 a1 <- order(-a)
 for(n in 1:length(a1)){x1[x == names(a)[n]] <- formatC(a1[n], flag = "0", width = 3)}
 a <- names(table(x1))
 b <- length(a)
 
-img = channel(matrix(1, nrow=dim(x)[1], ncol=dim(x)[2]), 'rgb')@.Data
+img = EBImage::channel(matrix(1, nrow=dim(x)[1], ncol=dim(x)[2]), 'rgb')@.Data
 for(n in 1:b){
   #n <- 3
   v <- grDevices::col2rgb(colorspace::rainbow_hcl(b, c=c)[n]) / 255
@@ -30,8 +33,17 @@ for(n in 1:b){
   img[,,3][x1 == a[n]] <- img[,,3][x1 == a[n]]*v[3]
 }
 
-return(EBImage::display(EBImage::Image(img, colormode = "Color"), method = "browser"))
+if(method == "browser"){
+EBImage::display(EBImage::combine(EBImage::Image(y, colormode = "Color"),
+                                  EBImage::Image(img, colormode = "Color")),
+                 nx=2, all=T, spacing = 0, margin = 0, drawGrid=F, method = "browser")
+}
 
+if(method == "raster"){
+EBImage::display(EBImage::combine(EBImage::Image(y, colormode = "Color"),
+                                  EBImage::Image(img, colormode = "Color")),
+                 nx=2, all=T, spacing = 0, margin = 0, drawGrid=F, method = "raster")
+}
 }
 
 

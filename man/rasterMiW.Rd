@@ -4,10 +4,14 @@
 \alias{rasterMiW}
 \title{rasterMiW: display as a raster image}
 \usage{
-rasterMiW(x, c = 75)
+rasterMiW(res, c = 75, method = "raster")
 }
 \arguments{
+\item{res}{a result of Img2DClustering}
+
 \item{c}{chroma value in the HCL color description.}
+
+\item{method}{select "browser" or "raster"}
 }
 \description{
 rasterMiW: display as a raster image

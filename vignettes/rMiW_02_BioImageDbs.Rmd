@@ -27,46 +27,41 @@ BiocStyle::markdown()
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
-#Install
-BiocManager::install("ExperimentHub", force = TRUE)
-BiocManager::install("BioImageDbs", force = TRUE)
-devtools::install_github( "kumeS/rMiW", force = TRUE )
+#Install BioImageDbs
+#BiocManager::install("ExperimentHub", force = TRUE)
+#BiocManager::install("BioImageDbs", force = TRUE)
 
-#Load
+#Load packages
 library(ExperimentHub)
 library(BioImageDbs)
 library(rMiW)
 
+##Optional
 #Removes all files in a cache file directory
 #install.packages("R.cache")
-R.cache::clearCache("ExperimentHub")
+#R.cache::clearCache("ExperimentHub")
 ```
 
-# Download 2D image dataset via BioImageDbs
+# Obtain 2D image dataset via BioImageDbs
 
 ```{r echo=TRUE, eval=FALSE}
-#Set EH
+#Set the ExperimentHub function
 eh <- ExperimentHub::ExperimentHub()
 
-#Query
-(qr0 <- query(eh, c("BioImageDbs", "LM_id0001")))
-(qr1 <- query(eh, c("BioImageDbs", "LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary")))
+#Check LM_id0001
+query(eh, c("BioImageDbs", "LM_id0001"))
 
-#LM_id0001
-N <- 1
-qr1[N]
-str(qr1[N])
+#check 4d tensor of LM_id0001
+(qr <- query(eh, c("BioImageDbs", "LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary")))
 
-#Download the dataset of LM_id0001
-ImgData <- qr1[[N]]
+#Download the dataset of LM_id0001 (LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds)
+ImgData <- qr[[1]]
 str(ImgData)
 
-#Gif animation
-N <- 2
-GifData <- qr1[[N]]
-
-#view
+#Obtain Gif animation and view it
+GifData <- qr[[2]]
 magick::image_read(GifData)
+
 ```
 
 #Create an U-NET-based model
@@ -74,11 +69,21 @@ magick::image_read(GifData)
 ```{r}
 #Width, Height, Channels
 ImgShape <- dim(ImgData$Train$Train_Original)[-1]
+ImgShape
+#[1] 512 512   1
 
-model <- unet(shape = ImgShape, nlevels = 3, nfilters = 16)
+#Create U-NET model
+model <- unet2D_v01(shape = ImgShape)
+
+#Vidualize the model
+plot_model(model=model)
+```
+
+#Set compile parameters for 
 
 
 
+```{r}
 ```
 
 # Session information {.unnumbered}

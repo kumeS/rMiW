@@ -10,6 +10,11 @@
 ##' @author Satoshi Kume
 ##'
 ##' @import DiagrammeR
+##' @import magrittr
+##' @importFrom purrr map_chr
+##' @importFrom DiagrammeR create_node_df create_edge_df
+##' @importFrom assertthat assert_that
+##' @importFrom glue glue
 ##' @export plot_model_modi
 ##'
 ##' @references deepviz (https://github.com/andrie/deepviz)
@@ -19,29 +24,34 @@
 ##' plot_model_modi(model)
 ##' }
 
-plot_model_modi <- function(model, width, height, ...){
-  UseMethod("plot_model", model)
-}
 
 globalVariables(c(".", "V1", "V2", "x"))
 
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
+}
+
 model_nodes <- function(x){
-  assert_that(is.keras_model(x))
+  assertthat::assert_that(is.keras_model(x))
   if (is.keras_model_sequential(x)) {
     model_layers <- x$get_config()$layers
-    l_name <- map_chr(model_layers, ~purrr::pluck(., "config", "name"))
+    l_name <- purrr::map_chr(model_layers, ~purrr::pluck(., "config", "name"))
   } else {
     model_layers <- x$get_config()$layers
-    l_name <- model_layers %>% map_chr("name")
+    l_name <- model_layers %>% purrr::map_chr("name")
   }
-  l_type <- model_layers %>% map_chr("class_name")
+  l_type <- model_layers %>% purrr::map_chr("class_name")
 
   l_activation <- model_layers %>%
-    map_chr(
+    purrr::map_chr(
       ~(purrr::pluck(., "config", "activation") %||% "")
     )
 
-  create_node_df(
+  DiagrammeR::create_node_df(
     n = length(model_layers),
     name = l_name,
     type = l_type,
@@ -52,28 +62,28 @@ model_nodes <- function(x){
 }
 
 model_edges_sequential <- function(ndf){
-  assert_that(is.data.frame(ndf))
+  assertthat::assert_that(is.data.frame(ndf))
   z <- embed(ndf$id, dimension = 2)
-  create_edge_df(
+  DiagrammeR::create_edge_df(
     from = z[, 2],
     to = z[, 1]
   )
 }
 
 inbound_nodes <- function(model){
-  assert_that(is.keras_model_network(model))
+  assertthat::assert_that(is.keras_model_network(model))
   model_layers <- model$get_config()$layers
-  inbound <- map(
+  inbound <- purrr::map(
     model_layers,
     function(x){
       if (length(x$inbound_nodes))
         x$inbound_nodes[[1]] %>%
-        map_chr(c(1, 1))
+        purrr::map_chr(c(1, 1))
       else NA
     }
   )
-  names(inbound) <- map(model_layers, "name")
-  z <- imap_dfr(
+  names(inbound) <- purrr::map(model_layers, "name")
+  z <- purrr::imap_dfr(
     inbound,
     ~ data.frame(to = .y, from = .x, stringsAsFactors = FALSE)
   )
@@ -82,8 +92,8 @@ inbound_nodes <- function(model){
 
 # The input x must be a nodes df
 model_edges_network <- function(model, ndf){
-  assert_that(is.keras_model_network(model))
-  assert_that(is.data.frame(ndf))
+  assertthat::assert_that(is.keras_model_network(model))
+  assertthat::assert_that(is.data.frame(ndf))
   z <- inbound_nodes(model)
   z$from <- ndf$id[match(z$from, ndf$name)]
   z$to   <- ndf$id[match(z$to,   ndf$name)]
@@ -183,5 +193,4 @@ plot_model <- function(model, width=4.5, height=1, ...){
     dplyr::bind_cols(coords)
 
   DiagrammeR::render_graph(graph, layout="dot")
-
 }

@@ -15,7 +15,7 @@ Description: This package provides a workflow for pre-processing, analysis
 Depends: R (>= 4.1.0)
 Imports: markdown, 
     rmarkdown, 
-    keras, 
+    keras (>=2.6.0), 
     EBImage (>= 4.34.0), 
     magick
 Suggests: roxygen2,
@@ -32,4 +32,4 @@ License: Artistic-2.0
 URL: https://github.com/kumeS/rMiW
 LazyLoad: yes
 SystemRequirements: python (>= 3.6.0)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

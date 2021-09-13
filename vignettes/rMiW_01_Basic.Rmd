@@ -29,7 +29,6 @@ BiocStyle::markdown()
 ```{r echo=TRUE, eval=FALSE}
 #Load package
 library(rMiW)
-library(EBImage)
 ```
 
 # Import a kidney image from rMiW
@@ -57,7 +56,6 @@ EBImage::display(img, method = "raster")
 ```{r echo=TRUE, eval=FALSE}
 #Read image: delete the 4th element of 3th dimension
 Img <- EBImage::readImage(files = file)
-Img <- EBImage::Image(Img@.Data[,,-4])
 
 #Convert to the gray image
 GrayImg <- toGrayScale(Img, mode = "luminance")
@@ -176,37 +174,20 @@ text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0
 
 ```{r echo=TRUE, eval=FALSE}
 #Read image: delete the 4th element of 3th dimension
-file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
-Img <- EBImage::readImage(files = file)
-Img <- EBImage::Image(Img@.Data[,,-4])
+Img <- readRDS(system.file("extdata", "Mouse01_Kid_x20_z0_RR01.Rds", package="rMiW"))
+str(Img)
 
 #Resize 1024x1024 and perform 3 clustering 
-ImgClus <- Img2DClustering(x=Img, Cluster = 3, XY=1024)
-#Visualize as a gray image
-EBImage::display(EBImage::Image(ImgClus), method = "browser")
+ImgClus3 <- Img2DClustering(x=Img, Cluster = 3, XY=1024)
 #Visualize as a color image
-rasterMiW(ImgClus)
+rasterMiW(ImgClus3, method = "raster")
 
 #Resize 1024x1024 and perform 4 clustering 
-ImgClus <- Img2DClustering(x=Img, Cluster = 4, XY=1024)
+ImgClus4 <- Img2DClustering(x=Img, Cluster = 4, XY=1024)
 #Visualize as a color image
-rasterMiW(ImgClus)
+rasterMiW(ImgClus4)
 
 ```
-
-## The clustering with a compressed image of 512x5124px
-
-```{r}
-
-
-```
-
-
-## The clustering with 2x2 tiles
-
-
-## The clustering with 5x5 tiles
-
 
 # Session information {.unnumbered}
 

@@ -33,8 +33,10 @@ d0 <- EBImage::resize(EBImage::Image(d, colormode = "Grayscale"),
 #str(d0)
 d1 <- matrix(d0@.Data, nrow=dim(d0@.Data)[1],  ncol=dim(d0@.Data)[2])
 #str(d1)
-return(d1)
+d2 <- list(Original=array(x, dim=dim(x)), Cluster=d1)
+return(d2)
 }else{
-return(d)
+d2 <- list(Original=x, Cluster=d)
+return(d2)
 }
 }

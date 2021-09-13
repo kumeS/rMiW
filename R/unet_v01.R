@@ -48,7 +48,7 @@ clayers <- clayers_pooled <- list()
 clayers_pooled[[1]] <- keras::layer_input(shape = shape)
 
 for(i in 2:(nlevels+1)) {
-clayers[[i]] <- rMiW:::unet_2Dlayer_v01(clayers_pooled[[i - 1]],
+clayers[[i]] <- .unet_2Dlayer_v01(clayers_pooled[[i - 1]],
                              filters = filter_sizes[i - 1],
                              dropout = dropouts[i-1])
 
@@ -61,7 +61,7 @@ clayers_pooled[[i]] <- keras::layer_max_pooling_2d(clayers[[i]],
 elayers <- list()
 
 ## center
-elayers[[nlevels + 1]] <- rMiW:::unet_2Dlayer_v01(clayers_pooled[[nlevels + 1]],
+elayers[[nlevels + 1]] <- .unet_2Dlayer_v01(clayers_pooled[[nlevels + 1]],
                                       filters = filter_sizes[nlevels + 1],
                                       dropout = dropouts[nlevels + 1])
 
@@ -73,7 +73,7 @@ elayers[[i]] <- keras::layer_conv_2d_transpose(elayers[[i+1]],
                                           padding = "same")
 
 elayers[[i]] <- keras::layer_concatenate(list(elayers[[i]], clayers[[i + 1]]), axis = 3)
-elayers[[i]] <- rMiW:::unet_2Dlayer_v01(elayers[[i]], filters = filter_sizes[i], dropout = dropouts[i])
+elayers[[i]] <- .unet_2Dlayer_v01(elayers[[i]], filters = filter_sizes[i], dropout = dropouts[i])
 
 }
 
