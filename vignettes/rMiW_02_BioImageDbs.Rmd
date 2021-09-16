@@ -26,7 +26,7 @@ BiocStyle::markdown()
 
 # Getting started
 
-```{r echo=TRUE, eval=FALSE}
+```{r echo=TRUE, eval=TRUE}
 #Install BioImageDbs
 #BiocManager::install("ExperimentHub", force = TRUE)
 #BiocManager::install("BioImageDbs", force = TRUE)
@@ -40,11 +40,15 @@ library(rMiW)
 #Removes all files in a cache file directory
 #install.packages("R.cache")
 #R.cache::clearCache("ExperimentHub")
+
+#extract R script
+#getwd()
+#knitr::purl("./rMiW/vignettes/rMiW_02_BioImageDbs.Rmd", output="./rMiW/vignettes/rMiW_02_BioImageDbs.R")
 ```
 
 # Obtain 2D image dataset via BioImageDbs
 
-```{r echo=TRUE, eval=FALSE}
+```{r echo=TRUE, eval=TRUE}
 #Set the ExperimentHub function
 eh <- ExperimentHub::ExperimentHub()
 
@@ -66,7 +70,7 @@ magick::image_read(GifData)
 
 #Create an U-NET-based model
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 #Width, Height, Channels
 ImgShape <- dim(ImgData$Train$Train_Original)[-1]
 ImgShape
@@ -79,12 +83,72 @@ model <- unet2D_v01(shape = ImgShape)
 plot_model(model=model)
 ```
 
-#Set compile parameters for 
+# Set compile parameters for 
 
+## compile
 
+```{r echo=TRUE, eval=TRUE}
+model <- model %>%
+     compile(
+      optimizer = optimizer_rmsprop(learning_rate = 0.01),
+      loss = bce_dice_loss,
+      metrics = dice_coef
+     )
 
-```{r}
 ```
+
+## Fit model
+
+```{r echo=TRUE, eval=TRUE}
+history <- model %>%
+  fit(array(ImgData$Train$Train_Original[1:20,,,1], dim = c(20,512,512,1)), 
+      array(ImgData$Train$Train_GroundTruth_Binary[1:20,,,1], dim = c(20,512,512,1)),
+      batch_size = 2,
+      epochs = 10,
+      validation_split = 1,
+      verbose = 1)
+
+```
+
+## View results
+
+```{r echo=TRUE, eval=TRUE}
+## Model evaluation
+Score <- model %>% 
+  evaluate(
+    ImgData$Train$Train_Original, 
+    ImgData$Train$Train_GroundTruth_Binary, 
+    verbose = 1)
+
+cat(paste0('Train loss:', round(Score[[1]], 4), '\nTrain accuracy:', round(Score[[2]], 4)))
+
+#Predict
+Y_hat <- predict(model, x = ImgData$Train$Train_Original, verbose=1)
+# mmand::threshold
+try(Y_hat5 <- purrr::map(purrr::array_branch(Y_hat, 1),
+               .f = function(z) {mmand::threshold(z, 0.5, binarise = TRUE)}), silent=TRUE)
+try(Y_hat <- list2tensor(Y_hat5), silent=TRUE)
+
+str(Y_hat)
+
+TAVE <- c()
+XY <- list(X=ImgData$Train$Train_Original,
+           Y=ImgData$Train$Train_GroundTruth_Binary)
+for(n in 1:dim(Y_hat)[1]){
+  #n <- 1
+  intersection <- sum( matrix(XY$Y[n,,,]) * matrix(Y_hat[n,,,]))
+  union <- sum( matrix(XY$Y[n,,,]) + matrix(Y_hat[n,,,]) ) - intersection
+  result <- (intersection + 1) / ( union + 1)
+  TAVE[n] <- result
+}
+TAVE
+mean(TAVE)
+sd(TAVE)
+
+
+```
+
+
 
 # Session information {.unnumbered}
 
