@@ -30,7 +30,7 @@ This package provides a workflow for pre-processing, analysis and deep learning 
 
 - [rMiW: 02. rMiW & BioImageDbs for a workflow for microscopy-based image analysis and deep learning](https://kumes.github.io/rMiW/vignettes/rMiW_02_BioImageDbs.html)
 
-- [rMiW: 03. Providing a image processing for a whole slide image](https://kumes.github.io/rMiW/vignettes/rMiW_03_WSI.html)
+- [rMiW: 03. Providing a image generation using GAN](https://kumes.github.io/rMiW/vignettes/rMiW_03_GAN.html)
 
 ## License
 
