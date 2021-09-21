@@ -1,5 +1,5 @@
 ---
-title: "rMiW: 03. Providing a image processing for a whole slide image"
+title: "rMiW: 03. Providing a workflow for Generative adversarial networks (GAN) with R"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
@@ -21,7 +21,7 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_01_Kidney.Rmd")$mtime`<br />
+**Last modified:** `r file.info("rMiW_03_GAN.Rmd")$mtime`<br />
 **Compiled**: `r date()`
 
 # Getting started
