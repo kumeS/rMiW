@@ -1,7 +1,7 @@
 Package: rMiW
 Type: Package
 Title: rMiW - R package for providing the analysis workflow for microscopy-based images
-Version: 0.99.1
+Version: 0.99.2
 Encoding: UTF-8
 Authors@R: c(
     person (given = "Satoshi", family = "Kume",
