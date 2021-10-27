@@ -11,8 +11,11 @@
 ##' @author Satoshi Kume
 ##'
 
-
 toGrayScale <- function(x, mode){
+if(!EBImage::is.Image(x)){
+  return("Warning: no proper value of x")
+}
+
 y <- EBImage::rgbImage(red = EBImage::getFrame(x, 1),
                        green = EBImage::getFrame(x, 2),
                        blue = EBImage::getFrame(x, 3))

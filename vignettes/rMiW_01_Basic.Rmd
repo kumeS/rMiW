@@ -5,7 +5,7 @@ author:
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: rMiW
+package: rMiW, EBImage
 output:
     BiocStyle::html_document:
         toc_float: false
@@ -21,13 +21,14 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_01_Kidney.Rmd")$mtime`<br />
-**Compiled**: `r date()`
+**Last modified:** `r file.info("rMiW_01_Basic.Rmd")$mtime`<br/>
+**Compiled**: `r Sys.time()`
 
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
-#Load package
+#Load packages
+library(EBImage)
 library(rMiW)
 ```
 
@@ -38,11 +39,20 @@ The displayed image (`Mouse01_Kid_x20_z0_RR01.png') is an image of whole slide i
 ```{r echo=TRUE, eval=FALSE}
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 
+#Read image
+Img <- EBImage::readImage(files = file)
+str(Img)
+
 #Visualization
-EBImage::display(EBImage::readImage(files = file), method = "raster")
+EBImage::display(Img, method = "raster")
+
+##Save as RDS
+#saveRDS(Img, "./Img.Rds")
 ```
 
 ```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+##Skip execution for this chunk.
+
 options(EBImage.display = "raster")
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 img <- EBImage::resize(EBImage::readImage(files = file), w = 500)
@@ -65,6 +75,8 @@ EBImage::display(GrayImg, method = "raster")
 ```
 
 ```{r Fig002, out.width = '75%', fig.cap = "The gray image of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+##Skip execution for this chunk.
+
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 img <- rMiW::toGrayScale(EBImage::resize(EBImage::readImage(files = file), w = 500), mode = "luminance")
 EBImage::display(img, method = "raster")
@@ -98,6 +110,8 @@ text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = 
 ```
 
 ```{r Fig003, out.width = '100%', fig.cap = "The resized images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+##Skip execution for this chunk.
+
 #Read image
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 Img <- EBImage::readImage(files = file)
@@ -145,6 +159,8 @@ text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0
 ```
 
 ```{r Fig004, out.width = '100%', fig.cap = "The rotated images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+##Skip execution for this chunk.
+
 #Read image
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 Img <- EBImage::readImage(files = file)
@@ -168,7 +184,15 @@ EBImage::display(Imgflop, method = "raster")
 text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
 ```
 
+- Transpose : 転置 (90度回転 +左右方向の回転)
+- Flip : 上下方向の回転
+- Flop : 左右方向の回転
+
 # Basic clustering using k-means
+
+k-means clustering is an unsupervised clustering technique to partition 
+*N* observations into k clusters in which each observation belongs to 
+the cluster with the nearest mean.
 
 ## The clustering with a compressed image of 1024x1024px 
 
@@ -189,7 +213,19 @@ rasterMiW(ImgClus4)
 
 ```
 
-```{r Fig005, out.width = '100%', fig.cap = "The clustering with k-means for Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig005, out.width = '100%', fig.cap = "Results of three clustering with k-means for Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+##Skip execution for this chunk.
+
+#Read image: delete the 4th element of 3th dimension
+Img <- readRDS(system.file("extdata", "Mouse01_Kid_x20_z0_RR01.Rds", package="rMiW"))
+str(Img)
+
+#Resize 1024x1024 and perform 3 clustering 
+ImgClus3 <- rMiW::Img2DClustering(x=Img, Cluster = 3, XY=1024)
+#Visualize as a color image
+rMiW::rasterMiW(ImgClus3, method = "raster")
+
+#barplot(table(ImgClus3$Cluster*ImgClus3$ClusterNumber))
 
 ```
 

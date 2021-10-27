@@ -52,6 +52,9 @@ library(rMiW)
 #Set the ExperimentHub function
 eh <- ExperimentHub::ExperimentHub()
 
+#All entities
+query(eh, c("BioImageDbs"))
+
 #Check LM_id0001
 query(eh, c("BioImageDbs", "LM_id0001"))
 
