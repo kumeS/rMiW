@@ -27,26 +27,26 @@ BiocStyle::markdown()
 # Getting started
 
 ```{r echo=TRUE, eval=TRUE}
-#Install BioImageDbs
-#BiocManager::install("ExperimentHub", force = TRUE)
-#BiocManager::install("BioImageDbs", force = TRUE)
-
 #Load packages
 library(ExperimentHub)
 library(BioImageDbs)
 library(rMiW)
+library(EBImage)
 
 ##Optional
-#Removes all files in a cache file directory
+##Removes all files in a cache file directory
 #install.packages("R.cache")
 #R.cache::clearCache("ExperimentHub")
 
+##Optional
 #extract R script
-#getwd()
 #knitr::purl("./rMiW/vignettes/rMiW_02_BioImageDbs.Rmd", output="./rMiW/vignettes/rMiW_02_BioImageDbs.R")
 ```
 
 # Obtain 2D image dataset via BioImageDbs
+
+About BioImageDbs package, 
+please ckeck [Providing Bioimage Dataset for ExperimentHub](https://bioconductor.org/packages/release/data/experiment/vignettes/BioImageDbs/inst/doc/BioImageDbs.html) document for more information.
 
 ```{r echo=TRUE, eval=TRUE}
 #Set the ExperimentHub function

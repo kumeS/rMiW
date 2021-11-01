@@ -21,8 +21,8 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_installation.Rmd")$mtime`<br />
-**Compiled**: `r date()`
+**Last modified:** `r file.info("rMiW_00_installation.Rmd")$mtime`<br />
+**Compiled**: `r Sys.time()`
 
 Currently, `r Rpackage("rMiW")` is a R package distributed in [kumeS's GitHub site](https://github.com/kumeS/rMiW).
 
@@ -64,18 +64,18 @@ library(BioImageDbs)
 
 ```
 
-# Optional proxy setting at OECU
+# Optional proxy setting
 
 Run the following commands in the R console.
 
 ```{r echo=TRUE, eval=FALSE}
-#Proxy setting at OECU
-if(T){
-proxy_url = "http://wwwproxy.osakac.ac.jp:8080"
+#Proxy URL
+proxy_url = "http://XXXX"
+
+#Proxy setting
 Sys.setenv("http_proxy" = proxy_url)
 Sys.setenv("https_proxy" = proxy_url)
 Sys.setenv("ftp_proxy" = proxy_url)
-}
 
 ```
 
