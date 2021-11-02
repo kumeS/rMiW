@@ -13,8 +13,9 @@
 
 rasterMiW <- function(res, c=75, method="raster") {
 
-if(!all(names(res) == c("Original", "Cluster"))){warning("")}
-#x <- ImgClus; str(x)
+if(!all(names(res) == c("Original", "Cluster", "ClusterNumber"))){
+  return(message("Warning: not proper value of res"))}
+#x <- ImgClus; str(x); str(res)
 x1 <- res$Cluster
 x <- res$Cluster
 y <- res$Original

@@ -28,6 +28,9 @@ ImageView2D_pred <- function(ImgArray_x,
 if(length(dim(ImgArray_x)) != 4){return(message("wrong dimensions of ImgArray_x"))}
 if(length(dim(ImgArray_y)) != 4){return(message("wrong dimensions of ImgArray_y"))}
 if(length(dim(ImgArray_pred)) != 4){return(message("wrong dimensions of ImgArray_pred"))}
+if(class(ImgArray_x) == "Image"){ ImgArray_x <- array(ImgArray_x, dim=dim(ImgArray_x)) }
+if(class(ImgArray_y) == "Image"){ ImgArray_y <- array(ImgArray_y, dim=dim(ImgArray_y))}
+if(class(ImgArray_pred) == "Image"){ ImgArray_pred <- array(ImgArray_pred, dim=dim(ImgArray_pred))}
 
 Lab01=lab[1]; Lab02=lab[2]; Lab03=lab[3]; Lab04=lab[4]
 Opac=c(0.2, 0.2); Width = 500; Height=250; XYsize = 256; Thres=0.4
@@ -44,11 +47,11 @@ if(!SaveAll){
 #ImgN <- 2
 Ximg <- (ImgArray$X[ImgN,,,] - range(ImgArray$X[ImgN,,,])[1])
 Ximg <- Ximg/ range(Ximg)[2]
-Image_color01 <- EBImage::paintObjects(ImgArray$Y[ImgN,,,]/2,
+Image_color01 <- EBImage::paintObjects(ImgArray$Y[ImgN,,,],
                                        EBImage::toRGB(Ximg),
                                        opac=Opac,
                                        col=c("red","red"), thick=T, closed=F)
-Image_color02 <- EBImage::paintObjects(ImgArray$Pred[ImgN,,,]/2,
+Image_color02 <- EBImage::paintObjects(ImgArray$Pred[ImgN,,,],
                                        EBImage::toRGB(Ximg),
                                        opac=Opac,
                                        col=c("blue","blue"),
@@ -85,11 +88,11 @@ for(n in 1:dim(ImgArray$X)[1]){
 #n <- 2
 Ximg <- (ImgArray$X[n,,,] - range(ImgArray$X[n,,,])[1])
 Ximg <- Ximg/ range(Ximg)[2]
-Image_color01 <- EBImage::paintObjects(ImgArray$Y[n,,,]/2,
+Image_color01 <- EBImage::paintObjects(ImgArray$Y[n,,,],
                                        EBImage::toRGB(Ximg),
                                        opac=Opac,
                                        col=c("red","red"), thick=T, closed=F)
-Image_color02 <- EBImage::paintObjects(ImgArray$Pred[n,,,]/2,
+Image_color02 <- EBImage::paintObjects(ImgArray$Pred[n,,,],
                                        EBImage::toRGB(Ximg),
                                        opac=Opac,
                                        col=c("blue","blue"),

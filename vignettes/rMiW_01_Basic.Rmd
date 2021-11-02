@@ -10,8 +10,8 @@ output:
     BiocStyle::html_document:
         toc_float: false
 vignette: >
-    %\VignetteIndexEntry{rMiW: 01.}
     %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{rMiW: 01.}
     %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -237,6 +237,39 @@ str(ImgRds)
 
 When we save the object/variable in R as a Rds file and load it, 
 the same R object will be reproduced.
+
+## Mark objects in images
+
+Overlap two images and color them.
+
+```{r echo=TRUE, eval=FALSE}
+file <- system.file("extdata", "Cell_Img.Rds", package="rMiW")
+
+#Read image
+CellImg <- readRDS(file)
+str(CellImg)
+
+#Cell image
+EBImage::display(CellImg$X, method = "raster")
+
+#Display them side-by-side.
+EBImage::display(EBImage::combine(CellImg$X, CellImg$Y), 
+                 nx=2, all=TRUE, spacing = 0.01, margin = 70, method = "raster")
+
+#Overlap them
+EBImage::display(EBImage::paintObjects(CellImg$Y,
+                                       EBImage::toRGB(CellImg$X),
+                                       opac=c(0.2, 0.2),
+                                       col=c("red","red"), thick=TRUE, closed=FALSE),
+                 method = "raster")
+
+#rMiW function
+rMiW::ImageView2D(ImgArray_x=CellImg$X,
+                  ImgArray_y=CellImg$Y,
+                  ImgN=1, 
+                  lab=c("Original", "Overlay", "Ground truth"))
+
+```
 
 # Basic clustering using k-means
 

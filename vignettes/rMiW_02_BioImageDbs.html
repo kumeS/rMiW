@@ -195,7 +195,7 @@ function toggle_visibility(id1) {
 <li><a href="#acquire-the-r-arrays"><span class="toc-section-number">2.2</span> Acquire the R arrays</a></li>
 <li><a href="#obtain-gif-animation-and-show-it"><span class="toc-section-number">2.3</span> Obtain gif animation and show it</a></li>
 </ul></li>
-<li><a href="#image-segmentation-for-cell-division-images"><span class="toc-section-number">3</span> Image Segmentation for cell division images</a>
+<li><a href="#image-segmentation-for-cell-division-images-with-two-class-binary-class"><span class="toc-section-number">3</span> Image Segmentation for cell division images with two class / binary class</a>
 <ul>
 <li><a href="#check-dimensions-of-images"><span class="toc-section-number">3.1</span> Check dimensions of images</a></li>
 <li><a href="#create-an-u-net-based-model"><span class="toc-section-number">3.2</span> Create an U-NET-based model</a></li>
@@ -211,10 +211,13 @@ function toggle_visibility(id1) {
 <li><a href="#view-results"><span class="toc-section-number">5</span> View results</a>
 <ul>
 <li><a href="#model-evaluation"><span class="toc-section-number">5.1</span> Model evaluation</a></li>
-<li><a href="#prediction-at-image-pixel-level"><span class="toc-section-number">5.2</span> Prediction at image pixel level</a></li>
+<li><a href="#model-prediction-at-image-pixel-level"><span class="toc-section-number">5.2</span> Model prediction at image pixel level</a></li>
 <li><a href="#visualization-of-results"><span class="toc-section-number">5.3</span> visualization of results</a></li>
 </ul></li>
-<li><a href="#prediction-for-test-dataset"><span class="toc-section-number">6</span> Prediction for test dataset</a></li>
+<li><a href="#prediction-for-test-dataset"><span class="toc-section-number">6</span> Prediction for test dataset</a>
+<ul>
+<li><a href="#visualization-of-test-results"><span class="toc-section-number">6.1</span> visualization of test results</a></li>
+</ul></li>
 <li><a href="#session-information">Session information</a></li>
 </ul>
 </div>
@@ -232,15 +235,16 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-11-02 17:46:20<br />
-<strong>Compiled</strong>: 2021-11-02 17:46:25</p>
+<p><strong>Last modified:</strong> 2021-11-02 23:18:20<br />
+<strong>Compiled</strong>: 2021-11-02 23:38:06</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <div id="load-packages" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Load packages</h2>
 <pre class="r"><code>library(ExperimentHub)
 library(rMiW)
-library(EBImage)</code></pre>
+library(EBImage)
+library(keras)</code></pre>
 </div>
 <div id="optional-update-ver-3.14" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Optional: Update (ver 3.14)</h2>
@@ -298,6 +302,7 @@ AnnotationHub::query(eh, c(&quot;BioImageDbs&quot;, &quot;LM_id0001&quot;))
 #check 4d tensor of LM_id0001
 (qr &lt;- AnnotationHub::query(eh, c(&quot;BioImageDbs&quot;, &quot;LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary&quot;)))
 
+#Select their metadata using `qr$`
 #show title
 qr$title
 
@@ -308,6 +313,7 @@ qr$description[3]</code></pre>
 <div id="acquire-the-r-arrays" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Acquire the R arrays</h2>
 <p>We use <code>[]</code> to access its metadata while <code>[[]]</code> to get its data instance.</p>
+<p>We could load from cache (~/Library/Caches/org.R-project.R/R/) once the data was downloaded.</p>
 <pre class="r"><code>#Access metadata
 qr[3]
 
@@ -317,7 +323,14 @@ qr[3]$description
 
 #Download the dataset of LM_id0001 (LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds)
 ImgData &lt;- qr[[3]]
-str(ImgData)</code></pre>
+str(ImgData)
+#List of 2
+# $ Train:List of 2
+#  ..$ Train_Original          : num [1:84, 1:512, 1:512, 1] 0.518 0.455 0.455 0.447 0.439 ...
+#  ..$ Train_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 0 0 0 0 0 0 0 0 0 ...
+# $ Test :List of 2
+#  ..$ Test_Original          : num [1:84, 1:512, 1:512, 1] 0.604 0.467 0.459 0.435 0.408 ...
+#  ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...</code></pre>
 <p><code>LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.Rds</code> is a list of
 4D arrays with the binary labels for the image segmentation of Human HeLa cells on a flat glass.</p>
 </div>
@@ -339,8 +352,8 @@ magick::image_read(GifData)</code></pre>
 an animation file (.gif) of the train dataset of LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds</p>
 </div>
 </div>
-<div id="image-segmentation-for-cell-division-images" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Image Segmentation for cell division images</h1>
+<div id="image-segmentation-for-cell-division-images-with-two-class-binary-class" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Image Segmentation for cell division images with two class / binary class</h1>
 <div id="check-dimensions-of-images" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Check dimensions of images</h2>
 <p>We will use dimensions of images (Width, Height, Channel(Gray)) for the model construction.</p>
@@ -356,13 +369,22 @@ ImgShape
 </div>
 <div id="create-an-u-net-based-model" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Create an U-NET-based model</h2>
-<p>We will make a U-Net model with dropout layers.</p>
-<pre class="r"><code>model &lt;- rMiW::unet2D_v01(shape = ImgShape)
+<p>We will make the U-Net model with dropout layers.</p>
+<pre class="r"><code>#ImgShape &lt;- c(512,512,1)
+model &lt;- rMiW::unet2D_v01(shape = ImgShape)
 model</code></pre>
 </div>
 <div id="vidualize-the-model" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Vidualize the model</h2>
-<pre class="r"><code>source(&quot;https://gist.githubusercontent.com/kumeS/41fed511efb45bd55d468d4968b0f157/raw/b7205c6285422e5166f70b770e1e8674d65f5ea2/DL_plot_modi_v1.2.R&quot;)
+<p>Here visualizes the U-NET network.</p>
+<pre class="r"><code>rMiW::plot_model(model=model)
+
+#OR
+#use plot_model in tensorflow
+rMiW::Py_plot_model(model=model)
+EBImage::display(EBImage::readImage(&quot;Model.png&quot;))</code></pre>
+<pre class="r"><code>#Alternatively, perform this if do not work above.
+source(&quot;https://gist.githubusercontent.com/kumeS/41fed511efb45bd55d468d4968b0f157/raw/b7205c6285422e5166f70b770e1e8674d65f5ea2/DL_plot_modi_v1.2.R&quot;)
 plot_model_modi(model=model)</code></pre>
 </div>
 </div>
@@ -402,6 +424,9 @@ history &lt;- model %&gt;%
 
 #Model weights as R arrays
 keras::get_weights(model)[[1]]</code></pre>
+<p>The <code>save_model_hdf5</code> function can save all information of the model;
+the weight values, the model’s configuration(architecture),
+and the optimizer configuration.</p>
 </div>
 <div id="re-load-re-compile-and-re-fit" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> Re-load, re-compile and re-fit</h2>
@@ -434,54 +459,75 @@ history &lt;- modelR %&gt;%
 <h2><span class="header-section-number">5.1</span> Model evaluation</h2>
 <pre class="r"><code>## Model evaluation
 Score &lt;- modelR %&gt;% 
-  keras::evaluate(X,  
+  keras::evaluate(X,
                   Y, 
                   verbose = 1)
 
 cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4), 
            &#39;\nTrain accuracy:&#39;, round(Score[[2]], 4)))
 
-#model_v01 (training: 50-60 epochs)
+#model_v01 (training: 60 epochs)
 #Train loss:1.3279
 #Train accuracy:0.8672</code></pre>
 </div>
-<div id="prediction-at-image-pixel-level" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> Prediction at image pixel level</h2>
-<pre class="r"><code>Y_hat &lt;- stats::predict(modelR, 
-                        x = X, verbose=1)
-str(Y_hat)
-
-# mmand::threshold
-try(Y_hat5 &lt;- purrr::map(purrr::array_branch(Y_hat, 1),
-               .f = function(z) {mmand::threshold(z, 0.5, binarise = TRUE)}), silent=TRUE)
-str(Y_hat5)
-try(Y_hat &lt;- rMiW::list2tensor(Y_hat5), silent=TRUE)
-str(Y_hat)</code></pre>
+<div id="model-prediction-at-image-pixel-level" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Model prediction at image pixel level</h2>
+<pre class="r"><code>Y_pred &lt;- rMiW::model.pred(model=modelR, 
+                           x=X)</code></pre>
 </div>
 <div id="visualization-of-results" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> visualization of results</h2>
+<p>We use <code>ImageView2D</code> function for the visualization.</p>
 <pre class="r"><code>for(n in 1:20){
-ImageView2D(X,
-            Y_hat,
+#n &lt;- 2
+rMiW::ImageView2D(X,
+            Y_pred,
             ImgN=n)
 Sys.sleep(0.1)
 }</code></pre>
+<p>We will visualize the results with another function.</p>
+<pre class="r"><code>ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=2)</code></pre>
 </div>
 </div>
 <div id="prediction-for-test-dataset" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Prediction for test dataset</h1>
-<p>TAVE &lt;- c()
-XY &lt;- list(X=ImgData<span class="math inline">\(Train\)</span>Train_Original,
-Y=ImgData<span class="math inline">\(Train\)</span>Train_GroundTruth_Binary)
-for(n in 1:dim(Y_hat)[1]){
-#n &lt;- 1
-intersection &lt;- sum( matrix(XY<span class="math inline">\(Y[n,,,]) * matrix(Y_hat[n,,,]))  union &lt;- sum( matrix(XY\)</span>Y[n,,,]) + matrix(Y_hat[n,,,]) ) - intersection
-result &lt;- (intersection + 1) / ( union + 1)
-TAVE[n] &lt;- result
-}
-TAVE
-mean(TAVE)
-sd(TAVE)</p>
+<pre class="r"><code>#Data
+Test_X &lt;- ImgData$Train$Train_Original[21:40,,,,drop=FALSE]
+str(Test_X)
+Test_Y &lt;- ImgData$Train$Train_GroundTruth_Binary[21:40,,,,drop=FALSE]
+str(Test_Y)
+
+## Model evaluation
+Score &lt;- modelR %&gt;% 
+  keras::evaluate(Test_X, 
+                  Test_Y, 
+                  verbose = 1)
+
+cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4), 
+           &#39;\nTrain accuracy:&#39;, round(Score[[2]], 4)))
+
+#model_v01 (training: 60 epochs)
+#Train loss:XXXX
+#Train accuracy:XXX</code></pre>
+<div id="visualization-of-test-results" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> visualization of test results</h2>
+<p>We use <code>ImageView2D</code> function for the visualization.</p>
+<pre class="r"><code>Test_Y_pred &lt;- rMiW::model.pred(model=modelR, 
+                                x=Test_X)
+
+for(n in 1:20){
+ImageView2D(Test_X,
+            Test_Y_pred,
+            ImgN=n)
+Sys.sleep(0.1)
+}</code></pre>
+<p>Test_X
+Test_Y
+Test_Y_pred</p>
+</div>
 </div>
 <div id="session-information" class="section level1 unnumbered">
 <h1>Session information</h1>
