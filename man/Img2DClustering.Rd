@@ -7,14 +7,16 @@
 Img2DClustering(x, Cluster = 3, XY = 1024, OriginalScale = TRUE)
 }
 \arguments{
+\item{x}{an Image object of EBImage}
+
 \item{Cluster}{a number of cluster}
 
 \item{XY}{pixels values of width and height}
 
-\item{OriginalScale}{}
+\item{OriginalScale}{a logical}
 }
 \description{
-Img2DClustering
+This function provides an image segmentation with k-means clustering.
 }
 \author{
 Satoshi Kume

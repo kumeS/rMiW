@@ -5,12 +5,12 @@ author:
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: EBImage, rMiW
+package: EBImage, rMiW, BiocStyle
 output:
     BiocStyle::html_document:
         toc_float: false
 vignette: >
-    %\VignetteIndexEntry{rMiW}
+    %\VignetteIndexEntry{rMiW: 01.}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -21,15 +21,27 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_01_Basic.Rmd")$mtime`<br/>
-**Compiled**: `r Sys.time()`
+**Last modified:** `r as.POSIXlt(file.info("rMiW_01_Basic.Rmd")$mtime, format="%Y-%m-%d %H:%M:%S", tz="Japan")`<br/>
+**Compiled**: `r as.POSIXlt(x=Sys.time(), format="%Y-%m-%d %H:%M:%S", tz="Japan")`
 
 # Getting started
 
 ```{r echo=TRUE, eval=FALSE}
+#Install packages
+install.packages(c("devtools", "BiocManager"), repos="http://cran.r-project.org")
+BiocManager::install(c("EBImage", "BioImageDbs"), force = TRUE )
+devtools::install_github( "kumeS/rMiW", force = TRUE )
+
 #Load packages
 library(EBImage)
+#remove.packages("rMiW")
 library(rMiW)
+```
+
+##Optional: Update (ver 3.14)
+
+```{r echo=TRUE, eval=FALSE}
+BiocManager::install(version = "3.14")
 ```
 
 # Import a kidney image from rMiW
@@ -39,7 +51,7 @@ observing the kidney tissue of C57BL/6J mouse (male, 10 week-old) stained by H&E
 
 ## Read image
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 
 #Read image
@@ -56,7 +68,7 @@ Here, `::` in R script indicates an explicit relation between the package and th
 EBImage::display(Img, method = "raster")
 ```
 
-```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 options(EBImage.display = "raster")
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
@@ -81,7 +93,7 @@ GrayImg <- toGrayScale(Img, mode = "luminance")
 EBImage::display(GrayImg, method = "raster")
 ```
 
-```{r Fig002, out.width = '75%', fig.cap = "The gray image of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig002, out.width = '75%', fig.cap = "The gray image of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
 img <- rMiW::toGrayScale(EBImage::resize(EBImage::readImage(files = file), w = 500), mode = "luminance")
@@ -123,7 +135,7 @@ EBImage::display(Img70, method = "raster")
 text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = c(0,0), col = "black", cex = 1.5)
 ```
 
-```{r Fig003, out.width = '100%', fig.cap = "The resized images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig003, out.width = '100%', fig.cap = "The resized images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 #Read image
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
@@ -173,7 +185,7 @@ EBImage::display(Imgflop, method = "raster")
 text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
 ```
 
-```{r Fig004, out.width = '100%', fig.cap = "The rotated images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig004, out.width = '100%', fig.cap = "The rotated images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 #Read image
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
@@ -243,14 +255,17 @@ Img <- readRDS(system.file("extdata", "Mouse01_Kid_x20_z0_RR01.Rds", package="rM
 str(Img)
 
 #Resize 1024x1024 and perform 3 clustering 
-ImgClus3 <- Img2DClustering(x=Img, Cluster = 3, XY=1024)
+ImgClus3 <- rMiW::Img2DClustering(x=Img, Cluster = 3, XY=1024)
 
 #Visualize as a color image
-rasterMiW(ImgClus3, method = "raster")
+rMiW::rasterMiW(ImgClus3, method = "raster")
 
+#Barplot
+barplot()
+table(unlist(ImgClus3$Cluster))
 ```
 
-```{r Fig005, out.width = '100%', fig.cap = "Results of three clustering with k-means for Mouse01_Kid_x20_z0_RR01.png", echo = FALSE}
+```{r Fig005, out.width = '100%', fig.cap = "Results of three clustering with k-means for Mouse01_Kid_x20_z0_RR01.png", eval=FALSE, echo = FALSE}
 ##Skip execution for this chunk.
 
 #Read image: delete the 4th element of 3th dimension

@@ -1,0 +1,280 @@
+---
+title: "rMiW: 01. Providing a basic workflow for microscopy-based images"
+author: 
+- name: Satoshi Kume
+  email: satoshi.kume.1984@gmail.com
+date: "`r Sys.Date()`"
+graphics: no
+package: EBImage, rMiW, BiocStyle
+output:
+    BiocStyle::html_document:
+        toc_float: false
+vignette: >
+    %\VignetteIndexEntry{rMiW: 01. BioC}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+**Last modified:** `r as.POSIXlt(file.info("rMiW_01_Basic_BioC.Rmd")$mtime, format="%Y-%m-%d %H:%M:%S", tz="Japan")`<br/>
+**Compiled**: `r as.POSIXlt(x=Sys.time(), format="%Y-%m-%d %H:%M:%S", tz="Japan")`
+
+# Getting started
+
+```{r echo=TRUE, eval=FALSE}
+#Install packages
+install.packages(c("devtools", "BiocManager"), repos="http://cran.r-project.org")
+BiocManager::install(c("EBImage", "BioImageDbs"), force = TRUE )
+devtools::install_github( "kumeS/rMiW", force = TRUE )
+
+#Load packages
+library(EBImage)
+#remove.packages("rMiW")
+library(rMiW)
+```
+
+# Import a kidney image from rMiW
+
+The displayed image (`Mouse01_Kid_x20_z0_RR01.png') is an image of whole slide imaging (WSI) for 
+observing the kidney tissue of C57BL/6J mouse (male, 10 week-old) stained by H&E. 
+
+## Read image
+
+```{r echo=TRUE, eval=FALSE}
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+
+#Read image
+Img <- EBImage::readImage(files = file)
+str(Img)
+```
+
+Here, `::` in R script indicates an explicit relation between the package and the functions.
+
+## Visualization
+
+```{r echo=TRUE, eval=FALSE}
+#Visualization
+EBImage::display(Img, method = "raster")
+```
+
+```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=TRUE}
+##Skip execution for this chunk.
+options(EBImage.display = "raster")
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+img <- EBImage::resize(EBImage::readImage(files = file), w = 500)
+EBImage::display(img, method = "raster")
+```
+
+# Basic image processing
+
+In this section, we will handle the Image object of EBIimage and perform image processing.
+
+## Convert to the grey image
+
+```{r echo=TRUE, eval=FALSE}
+#Read image: delete the 4th element of 3th dimension
+#Img <- EBImage::readImage(files = file)
+
+#Convert to the gray image
+GrayImg <- toGrayScale(Img, mode = "luminance")
+
+#Visualization
+EBImage::display(GrayImg, method = "raster")
+```
+
+```{r Fig002, out.width = '75%', fig.cap = "The gray image of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=TRUE}
+##Skip execution for this chunk.
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+img <- rMiW::toGrayScale(EBImage::resize(EBImage::readImage(files = file), w = 500), mode = "luminance")
+EBImage::display(img, method = "raster")
+```
+
+## Resize the image
+
+```{r echo=TRUE, eval=FALSE}
+#1% area size
+Img10 <- EBImage::resize(Img, 
+                         w = round(dim(Img)[1]*0.1, 0), 
+                         filter = "bilinear")
+
+#6% area size
+Img25 <- EBImage::resize(Img, 
+                         w = round(dim(Img)[1]*0.25, 0), 
+                         filter = "bilinear")
+
+#25% area size
+Img50 <- EBImage::resize(Img, 
+                         w = round(dim(Img)[1]*0.5, 0), 
+                         filter = "bilinear")
+
+#50% area size
+Img70 <- EBImage::resize(Img, 
+                         w = round(dim(Img)[1]*0.707, 0), 
+                         filter = "bilinear")
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img10, method = "raster")
+text(x = dim(Img10)[1]/20, y = dim(Img10)[2]/10, label = "1% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img25, method = "raster")
+text(x = dim(Img25)[1]/20, y = dim(Img25)[2]/10, label = "6% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img50, method = "raster")
+text(x = dim(Img50)[1]/20, y = dim(Img50)[2]/10, label = "25% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img70, method = "raster")
+text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+```{r Fig003, out.width = '100%', fig.cap = "The resized images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=TRUE}
+##Skip execution for this chunk.
+#Read image
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+Img <- EBImage::readImage(files = file)
+
+#1% area size
+Img10 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.1, 0), filter = "bilinear")
+#6% area size
+Img25 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.25, 0), filter = "bilinear")
+#25% area size
+Img50 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.5, 0), filter = "bilinear")
+#50% area size
+Img70 <- EBImage::resize(Img, w = round(dim(Img)[1]*0.707, 0), filter = "bilinear")
+
+par(mfrow=c(2,2))
+EBImage::display(Img10, method = "raster")
+text(x = dim(Img10)[1]/20, y = dim(Img10)[2]/10, label = "1% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img25, method = "raster")
+text(x = dim(Img25)[1]/20, y = dim(Img25)[2]/10, label = "6% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img50, method = "raster")
+text(x = dim(Img50)[1]/20, y = dim(Img50)[2]/10, label = "25% area size", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Img70, method = "raster")
+text(x = dim(Img70)[1]/20, y = dim(Img70)[2]/10, label = "50% area size", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+## Transpose the image
+
+Here we will perform some rotation operations.
+
+```{r echo=TRUE, eval=FALSE}
+#Transpose the image
+ImgTrans <- EBImage::transpose(Img)
+
+#Flip or flop the image
+Imgflip <- EBImage::flip(Img)
+Imgflop <- EBImage::flop(Img)
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img, method = "raster")
+text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(ImgTrans, method = "raster")
+text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflip, method = "raster")
+text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflop, method = "raster")
+text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+```{r Fig004, out.width = '100%', fig.cap = "The rotated images of Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=TRUE}
+##Skip execution for this chunk.
+#Read image
+file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+Img <- EBImage::readImage(files = file)
+
+#Transpose the image
+ImgTrans <- EBImage::transpose(Img)
+
+#Flip or flop the image
+Imgflip <- EBImage::flip(Img)
+Imgflop <- EBImage::flop(Img)
+
+#Visualization
+par(mfrow=c(2,2))
+EBImage::display(Img, method = "raster")
+text(x = dim(Img)[1]/20, y = dim(Img)[2]/10, label = "Original", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(ImgTrans, method = "raster")
+text(x = dim(ImgTrans)[1]/20, y = dim(ImgTrans)[2]/10, label = "Transpose", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflip, method = "raster")
+text(x = dim(Imgflip)[1]/20, y = dim(Imgflip)[2]/10, label = "Flip", adj = c(0,0), col = "black", cex = 1.5)
+EBImage::display(Imgflop, method = "raster")
+text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0), col = "black", cex = 1.5)
+```
+
+- Transpose : 90 degree rotation + Horizontal rotation (90度回転 +左右方向の回転)
+- Flip : Vertical rotation (上下方向の回転)
+- Flop : Horizontal rotation (左右方向の回転)
+
+## Save image
+
+We can save the file in image format (jpeg, png, tiff) or R binary (.Rds).
+
+```{r echo=TRUE, eval=FALSE}
+#Save as PNG
+EBImage::writeImage(Img, files = "./Img.png",
+                    type = "png")
+
+#Save as TIFF
+EBImage::writeImage(Img, files = "./Img.tif",
+                    type = "tiff")
+
+#Save as R binary for single Objects (.Rda)
+saveRDS(Img, "./Img.Rds")
+
+#Read Rds format
+ImgRds <- readRDS("./Img.Rds")
+str(ImgRds)
+```
+
+When we save the object/variable in R as a Rds file and load it, 
+the same R object will be reproduced.
+
+# Basic clustering using k-means
+
+k-means clustering is an unsupervised clustering technique to partition 
+*N* observations into k clusters in which each observation belongs to 
+the cluster with the nearest mean.
+
+## The clustering with a compressed image of 1024x1024px 
+
+Here, we use the k-means clustering to divide the RGB intensity of the image into three classes.
+
+```{r echo=TRUE, eval=FALSE}
+#Read image: delete the 4th element of 3th dimension
+#Load from the R binary
+Img <- readRDS(system.file("extdata", "Mouse01_Kid_x20_z0_RR01.Rds", package="rMiW"))
+str(Img)
+
+#Resize 1024x1024 and perform 3 clustering 
+ImgClus3 <- rMiW::Img2DClustering(x=Img, Cluster = 3, XY=1024)
+
+#Visualize as a color image
+rMiW::rasterMiW(ImgClus3, method = "raster")
+
+#Barplot
+barplot(table(ImgClus3$Cluster*ImgClus3$ClusterNumber))
+```
+
+```{r Fig005, out.width = '100%', fig.cap = "Results of three clustering with k-means for Mouse01_Kid_x20_z0_RR01.png", eval=TRUE, echo = FALSE}
+##Skip execution for this chunk.
+
+#Read image: delete the 4th element of 3th dimension
+Img <- readRDS(system.file("extdata", "Mouse01_Kid_x20_z0_RR01.Rds", package="rMiW"))
+str(Img)
+
+#Resize 1024x1024 and perform 3 clustering 
+ImgClus3 <- rMiW::Img2DClustering(x=Img, Cluster = 3, XY=1024)
+#Visualize as a color image
+rMiW::rasterMiW(ImgClus3, method = "raster")
+
+```
+
+# Session information {.unnumbered}
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+

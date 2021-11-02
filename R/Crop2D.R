@@ -1,7 +1,7 @@
 ##' @title crop2D: Crop image to array
 ##'
-##' @param x
-##' @param XY
+##' @param x an image obkject of EBImage
+##' @param XY a pixel of width and height
 ##' @param Crop a numeric: ex. 2^n
 ##'
 ##' @importFrom EBImage resize

@@ -83,8 +83,8 @@ multilabel_dice_coefficientR <- function( y_true, y_pred, smooth = 1.0 ){
       intersection <- y_true_label_f * y_pred_label_f
       union <- y_true_label_f + y_pred_label_f - intersection
 
-      numerator <- numerator + k_sum( intersection )
-      denominator <- denominator + k_sum( union )
+      numerator <- numerator + keras::k_sum( intersection )
+      denominator <- denominator + keras::k_sum( union )
     }
   }
 

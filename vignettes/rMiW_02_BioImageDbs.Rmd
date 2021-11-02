@@ -1,17 +1,17 @@
 ---
-title: "rMiW: 02. rMiW & BioImageDbs for a workflow for microscopy-based image analysis and deep learning"
+title: "rMiW: 02. rMiW & BioImageDbs for a workflow for microscopy-based image analysis and U-Net model"
 author: 
 - name: Satoshi Kume
   email: satoshi.kume.1984@gmail.com
 date: "`r Sys.Date()`"
 graphics: no
-package: rMiW
+package: rMiW, BioImageDbs
 output:
     BiocStyle::html_document:
         toc_float: false
 vignette: >
-    %\VignetteIndexEntry{rMiW}
     %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{rMiW: 02}
     %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -21,137 +21,374 @@ editor_options:
 BiocStyle::markdown()
 ```
 
-**Last modified:** `r file.info("rMiW_02_BioImageDbs.Rmd")$mtime`<br />
-**Compiled**: `r date()`
+**Last modified:** `r as.POSIXlt(file.info("rMiW_02_BioImageDbs.Rmd")$mtime, format="%Y-%m-%d %H:%M:%S", tz="Japan")`<br />
+**Compiled**: `r as.POSIXlt(x=Sys.time(), format="%Y-%m-%d %H:%M:%S", tz="Japan")`
 
 # Getting started
 
-```{r echo=TRUE, eval=TRUE}
-#Load packages
+## Load packages
+
+```{r echo=TRUE, eval=FALSE}
 library(ExperimentHub)
-library(BioImageDbs)
 library(rMiW)
 library(EBImage)
+library(keras)
+```
 
-##Optional
-##Removes all files in a cache file directory
-#install.packages("R.cache")
-#R.cache::clearCache("ExperimentHub")
+## Optional: Update (ver 3.14)
 
-##Optional
-#extract R script
-#knitr::purl("./rMiW/vignettes/rMiW_02_BioImageDbs.Rmd", output="./rMiW/vignettes/rMiW_02_BioImageDbs.R")
+```{r echo=TRUE, eval=FALSE}
+BiocManager::install(version = "3.14")
+```
+
+## Optional:  Python environment on R
+
+```{r echo=TRUE, eval=FALSE}
+#On MacOSX
+library(reticulate)
+#reticulate::install_miniconda(force = T)
+#reticulate::use_python("~Library/r-miniconda/envs/r-reticulate/bin/python")
+reticulate::py_config()
+
+#install pydot
+reticulate::py_install("pydot")
+```
+
+##Optional: install keras / tensorflow (ver 3.14)
+
+```{r echo=TRUE, eval=FALSE}
+keras::install_keras()
+```
+
+## Optional: Removes all files in a cache file directory
+
+```{r echo=TRUE, eval=FALSE}
+install.packages("R.cache")
+#system("open ~/Library/Caches/org.R-project.R/R/")
+R.cache::clearCache("~/Library/Caches/org.R-project.R/R/ExperimentHub")
+```
+
+## Optional: extract R script from the Rmd file
+
+```{r echo=TRUE, eval=FALSE}
+knitr::purl("./rMiW/vignettes/rMiW_02_BioImageDbs.Rmd", output="./rMiW/vignettes/rMiW_02_BioImageDbs.R")
 ```
 
 # Obtain 2D image dataset via BioImageDbs
 
-About BioImageDbs package, 
+About the BioImageDbs package, 
 please ckeck [Providing Bioimage Dataset for ExperimentHub](https://bioconductor.org/packages/release/data/experiment/vignettes/BioImageDbs/inst/doc/BioImageDbs.html) document for more information.
 
-```{r echo=TRUE, eval=TRUE}
+Please check [the metadata of BioImageDbs](https://github.com/kumeS/BioImageDbs/blob/main/inst/extdata/v02/metadata_v02.csv) in GitHub.
+
+```{r echo=TRUE, eval=FALSE}
+#Access via R
+#Providing Bioimage Dataset for ExperimentHub
+browseURL("https://bioconductor.org/packages/release/data/experiment/vignettes/BioImageDbs/inst/doc/BioImageDbs.html")
+
+#The metadata of BioImageDbs
+browseURL("https://github.com/kumeS/BioImageDbs/blob/main/inst/extdata/v02/metadata_v02.csv")
+```
+
+## Search query for the BioImageDbs
+
+Via the ExperimentHub function, 
+we can obtain the supervised image data as a list of R arrays.
+
+Here shows an example of a search query for the BioImageDbs (`snapshotDate(): 2021-10-18`).
+
+```{r echo=TRUE, eval=FALSE}
 #Set the ExperimentHub function
 eh <- ExperimentHub::ExperimentHub()
 
-#All entities
-query(eh, c("BioImageDbs"))
+#All entities of BioImageDbs
+AnnotationHub::query(eh, c("BioImageDbs"))
 
-#Check LM_id0001
-query(eh, c("BioImageDbs", "LM_id0001"))
+#Query with LM_id0001 (Light Microscopy ID 0001)
+AnnotationHub::query(eh, c("BioImageDbs", "LM_id0001"))
 
 #check 4d tensor of LM_id0001
-(qr <- query(eh, c("BioImageDbs", "LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary")))
+(qr <- AnnotationHub::query(eh, c("BioImageDbs", "LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary")))
 
-#Download the dataset of LM_id0001 (LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds)
-ImgData <- qr[[1]]
-str(ImgData)
+#Select their metadata using `qr$`
+#show title
+qr$title
 
-#Obtain Gif animation and view it
-GifData <- qr[[2]]
-magick::image_read(GifData)
-
+#show description
+qr$description[3]
 ```
 
-#Create an U-NET-based model
+Note:  small `.rds` data does not work. They will be removed in future.
 
-```{r echo=TRUE, eval=TRUE}
-#Width, Height, Channels
+## Acquire the R arrays
+
+We use `[]` to access its metadata while `[[]]` to get its data instance.
+
+We could load from cache (~/Library/Caches/org.R-project.R/R/) once the data was downloaded.
+
+```{r echo=TRUE, eval=FALSE}
+#Access metadata
+qr[3]
+
+#Show metadata 
+qr[3]$title
+qr[3]$description
+
+#Download the dataset of LM_id0001 (LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds)
+ImgData <- qr[[3]]
+str(ImgData)
+#List of 2
+# $ Train:List of 2
+#  ..$ Train_Original          : num [1:84, 1:512, 1:512, 1] 0.518 0.455 0.455 0.447 0.439 ...
+#  ..$ Train_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 0 0 0 0 0 0 0 0 0 ...
+# $ Test :List of 2
+#  ..$ Test_Original          : num [1:84, 1:512, 1:512, 1] 0.604 0.467 0.459 0.435 0.408 ...
+#  ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...
+```
+
+`LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.Rds` is a list of 
+4D arrays with the binary labels for the image segmentation of Human HeLa cells on a flat glass.
+
+## Obtain gif animation and show it
+
+Here we will get a gif animation and check the result of data visualization.
+
+```{r echo=TRUE, eval=FALSE}
+#Access metadata
+qr[2]
+
+#show metadata
+qr[2]$title
+qr[2]$description
+    
+#Get gif animation
+GifData <- qr[[2]]
+str(GifData)  # Data path
+magick::image_read(GifData)
+```
+
+`LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary_train_dataset.gif` is 
+an animation file (.gif) of the train dataset of LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds
+
+# Image Segmentation for cell division images with two class / binary class
+
+## Check dimensions of images
+
+We will use dimensions of images (Width, Height, Channel(Gray)) for the model construction.
+
+```{r echo=TRUE, eval=FALSE}
+#Dimensions of ImgData
+#Image number, Width, Height, Channel(Gray)
+str(ImgData)
+dim(ImgData$Train$Train_Original)
+
+#Use Width, Height, Channel(Gray)
 ImgShape <- dim(ImgData$Train$Train_Original)[-1]
 ImgShape
 #[1] 512 512   1
+```
 
-#Create U-NET model
-model <- unet2D_v01(shape = ImgShape)
+## Create an U-NET-based model
 
-#Vidualize the model
-plot_model(model=model)
+We will make the U-Net model with dropout layers.
+
+```{r echo=TRUE, eval=FALSE}
+#ImgShape <- c(512,512,1)
+model <- rMiW::unet2D_v01(shape = ImgShape)
+model
+```
+
+## Vidualize the model
+
+Here visualizes the U-NET network.
+
+```{r echo=TRUE, eval=FALSE}
+rMiW::plot_model(model=model)
+
+#OR
+#use plot_model in tensorflow
+rMiW::Py_plot_model(model=model)
+EBImage::display(EBImage::readImage("Model.png"))
+```
+
+```{r echo=TRUE, eval=FALSE}
+#Alternatively, perform this if do not work above.
+source("https://gist.githubusercontent.com/kumeS/41fed511efb45bd55d468d4968b0f157/raw/b7205c6285422e5166f70b770e1e8674d65f5ea2/DL_plot_modi_v1.2.R")
+plot_model_modi(model=model)
 ```
 
 # Set compile parameters for 
 
-## compile
+## Compile the model
 
-```{r echo=TRUE, eval=TRUE}
+Here we will choose the optimizer and loss function.
+
+```{r echo=TRUE, eval=FALSE}
 model <- model %>%
-     compile(
-      optimizer = optimizer_rmsprop(learning_rate = 0.01),
-      loss = bce_dice_loss,
-      metrics = dice_coef
+     keras::compile(
+       optimizer = keras::optimizer_rmsprop(learning_rate = 0.01),
+       loss = rMiW::bce_dice_loss,
+       metrics = rMiW::dice_coef
+     )
+```
+
+## Fit the model
+
+```{r echo=TRUE, eval=FALSE}
+#Data
+X <- ImgData$Train$Train_Original[1:20,,,,drop=FALSE]
+str(X)
+Y <- ImgData$Train$Train_GroundTruth_Binary[1:20,,,,drop=FALSE]
+str(Y)
+
+history <- model %>%
+  keras::fit(x = X, 
+             y = Y,
+             batch_size = 2,
+             epochs = 50,
+             validation_split = 0,
+             verbose = 1)
+```
+
+Should use `drop=F` to avoid any change of array shape.
+
+## Save the model by `save_model_hdf5()`
+
+```{r echo=TRUE, eval=FALSE}
+model %>% 
+  keras::save_model_hdf5("model_v01.h5")
+
+#Model weights as R arrays
+keras::get_weights(model)[[1]]
+```
+
+The `save_model_hdf5` function can save all information of the model; 
+the weight values, the model’s configuration(architecture), 
+and the optimizer configuration.
+
+## Re-load, re-compile and re-fit
+
+```{r echo=TRUE, eval=FALSE}
+#Re-load
+modelR <- keras::load_model_hdf5("model_v01.h5",compile=F)
+summary(modelR)
+keras::get_weights(modelR)[[1]]
+
+#Re-compile
+modelR <- modelR %>%
+     keras::compile(
+       optimizer = keras::optimizer_rmsprop(learning_rate = 0.01),
+       loss = rMiW::bce_dice_loss,
+       metrics = rMiW::dice_coef
      )
 
+#Re-fit
+history <- modelR %>%
+  keras::fit(x = X, 
+             y = Y,
+             batch_size = 2,
+             epochs = 50,
+             validation_split = 0,
+             verbose = 1)
 ```
 
-## Fit model
+# View results
 
-```{r echo=TRUE, eval=TRUE}
-history <- model %>%
-  fit(array(ImgData$Train$Train_Original[1:20,,,1], dim = c(20,512,512,1)), 
-      array(ImgData$Train$Train_GroundTruth_Binary[1:20,,,1], dim = c(20,512,512,1)),
-      batch_size = 2,
-      epochs = 10,
-      validation_split = 1,
-      verbose = 1)
-
-```
-
-## View results
-
-```{r echo=TRUE, eval=TRUE}
 ## Model evaluation
-Score <- model %>% 
-  evaluate(
-    ImgData$Train$Train_Original, 
-    ImgData$Train$Train_GroundTruth_Binary, 
-    verbose = 1)
 
-cat(paste0('Train loss:', round(Score[[1]], 4), '\nTrain accuracy:', round(Score[[2]], 4)))
+```{r echo=TRUE, eval=FALSE}
+## Model evaluation
+Score <- modelR %>% 
+  keras::evaluate(X,
+                  Y, 
+                  verbose = 1)
 
-#Predict
-Y_hat <- predict(model, x = ImgData$Train$Train_Original, verbose=1)
-# mmand::threshold
-try(Y_hat5 <- purrr::map(purrr::array_branch(Y_hat, 1),
-               .f = function(z) {mmand::threshold(z, 0.5, binarise = TRUE)}), silent=TRUE)
-try(Y_hat <- list2tensor(Y_hat5), silent=TRUE)
+cat(paste0('Train loss:', round(Score[[1]], 4), 
+           '\nTrain accuracy:', round(Score[[2]], 4)))
 
-str(Y_hat)
+#model_v01 (training: 60 epochs)
+#Train loss:1.3279
+#Train accuracy:0.8672
+```
 
-TAVE <- c()
-XY <- list(X=ImgData$Train$Train_Original,
-           Y=ImgData$Train$Train_GroundTruth_Binary)
-for(n in 1:dim(Y_hat)[1]){
-  #n <- 1
-  intersection <- sum( matrix(XY$Y[n,,,]) * matrix(Y_hat[n,,,]))
-  union <- sum( matrix(XY$Y[n,,,]) + matrix(Y_hat[n,,,]) ) - intersection
-  result <- (intersection + 1) / ( union + 1)
-  TAVE[n] <- result
+## Model prediction at image pixel level
+
+```{r echo=TRUE, eval=FALSE}
+Y_pred <- rMiW::model.pred(model=modelR, 
+                           x=X)
+```
+
+## visualization of results
+
+We use `ImageView2D` function for the visualization.
+
+```{r echo=TRUE, eval=FALSE}
+for(n in 1:20){
+#n <- 2
+rMiW::ImageView2D(X,
+            Y_pred,
+            ImgN=n)
+Sys.sleep(0.1)
 }
-TAVE
-mean(TAVE)
-sd(TAVE)
+```
+
+We will visualize the results with another function.
 
 
+```{r echo=TRUE, eval=FALSE}
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=2)
 ```
 
 
+# Prediction for test dataset
+
+```{r echo=TRUE, eval=FALSE}
+#Data
+Test_X <- ImgData$Train$Train_Original[21:40,,,,drop=FALSE]
+str(Test_X)
+Test_Y <- ImgData$Train$Train_GroundTruth_Binary[21:40,,,,drop=FALSE]
+str(Test_Y)
+
+## Model evaluation
+Score <- modelR %>% 
+  keras::evaluate(Test_X, 
+                  Test_Y, 
+                  verbose = 1)
+
+cat(paste0('Train loss:', round(Score[[1]], 4), 
+           '\nTrain accuracy:', round(Score[[2]], 4)))
+
+#model_v01 (training: 60 epochs)
+#Train loss:XXXX
+#Train accuracy:XXX
+```
+
+## visualization of test results
+
+We use `ImageView2D` function for the visualization.
+
+```{r echo=TRUE, eval=FALSE}
+Test_Y_pred <- rMiW::model.pred(model=modelR, 
+                                x=Test_X)
+
+for(n in 1:20){
+ImageView2D(Test_X,
+            Test_Y_pred,
+            ImgN=n)
+Sys.sleep(0.1)
+}
+```
+
+Test_X
+Test_Y
+Test_Y_pred
+
+```{r echo=TRUE, eval=FALSE}
+
+```
 
 # Session information {.unnumbered}
 

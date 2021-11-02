@@ -1,9 +1,11 @@
 ##' @title Img2DClustering
 ##'
-##' @param x
+##' @description This function provides an image segmentation with k-means clustering.
+##'
+##' @param x an Image object of EBImage
 ##' @param Cluster a number of cluster
 ##' @param XY pixels values of width and height
-##' @param OriginalScale
+##' @param OriginalScale a logical
 ##'
 ##' @export Img2DClustering
 ##' @importFrom EBImage resize

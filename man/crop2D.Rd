@@ -7,6 +7,10 @@
 crop2D(x, XY = 1024, Crop = 2^3)
 }
 \arguments{
+\item{x}{an image obkject of EBImage}
+
+\item{XY}{a pixel of width and height}
+
 \item{Crop}{a numeric: ex. 2^n}
 }
 \description{
