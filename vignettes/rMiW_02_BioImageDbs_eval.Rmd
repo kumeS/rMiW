@@ -294,11 +294,18 @@ history <- model %>%
   - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step (7.3-fold faster)
   - GPU (Quadro RTX 8000):  51 ms/step (307.8-fold faster)
 
-```{r Fig001, out.width = '75%', fig.cap = "keras::fit process", echo = FALSE, eval=FALSE}
+```{r Fig001, out.width = '75%', fig.cap = "keras::fit process: 50 epochs (model_v01.h5)", echo = FALSE, eval=TRUE}
 ##Skip execution for this chunk.
-file <- system.file("extdata", "Fit.png", package="rMiW")
+file <- system.file("extdata", "Fit_01.png", package="rMiW")
 EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
 ```
+
+```{r Fig002, out.width = '75%', fig.cap = "keras::fit process: 2000 epochs with GPU (model_v02.h5)", echo = FALSE, eval=TRUE}
+##Skip execution for this chunk.
+file <- system.file("extdata", "Fit_01.png", package="rMiW")
+EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
+```
+
 
 ## Save the model by `save_model_hdf5()`
 
