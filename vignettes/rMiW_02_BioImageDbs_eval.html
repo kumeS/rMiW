@@ -236,8 +236,8 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-11-03 12:38:18<br />
-<strong>Compiled</strong>: 2021-11-03 15:09:16</p>
+<p><strong>Last modified:</strong> 2021-11-03 21:53:37<br />
+<strong>Compiled</strong>: 2021-11-03 21:54:30</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <div id="load-packages" class="section level2" number="1.1">
@@ -256,15 +256,22 @@ library(keras)</code></pre>
 <pre class="r"><code>#On MacOSX
 library(reticulate)
 #reticulate::install_miniconda(force = T)
-#reticulate::use_python(&quot;~Library/r-miniconda/envs/r-reticulate/bin/python&quot;)
+#reticulate::use_python(&quot;~/Library/r-miniconda/envs/r-reticulate/bin/python&quot;)
 reticulate::py_config()
 
 #install pydot
-reticulate::py_install(&quot;pydot&quot;)</code></pre>
+#reticulate::py_install(&quot;pydot&quot;)
+
+#On CentOS
+library(reticulate)
+#reticulate::install_miniconda(force = T)
+#reticulate::use_python(&quot;~/.local/share/r-miniconda/envs/r-reticulate/bin/python&quot;)
+reticulate::py_config()</code></pre>
 </div>
 <div id="optional-install-python-packages-for-r-keras-tensorflow-ver-3.14" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Optional: install python packages for R keras / tensorflow (ver 3.14)</h2>
-<pre class="r"><code>keras::install_keras()</code></pre>
+<pre class="r"><code>#For CPU
+keras::install_keras()</code></pre>
 </div>
 <div id="optional-removes-all-files-in-the-cache-directory" class="section level2" number="1.5">
 <h2><span class="header-section-number">1.5</span> Optional: Removes all files in the cache directory</h2>
@@ -403,6 +410,8 @@ qr[3]$title</code></pre>
 <pre class="r"><code>#Download the dataset of LM_id0001 (LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds)
 ImgData &lt;- qr[[3]]</code></pre>
 <pre><code>## see ?BioImageDbs and browseVignettes(&#39;BioImageDbs&#39;) for documentation</code></pre>
+<pre><code>## Could not check id: EH6880 for updates.
+##   Using previously cached version.</code></pre>
 <pre><code>## loading from cache</code></pre>
 <pre class="r"><code>str(ImgData)</code></pre>
 <pre><code>## List of 2
@@ -412,6 +421,13 @@ ImgData &lt;- qr[[3]]</code></pre>
 ##  $ Test :List of 2
 ##   ..$ Test_Original          : num [1:84, 1:512, 1:512, 1] 0.604 0.467 0.459 0.435 0.408 ...
 ##   ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...</code></pre>
+<pre class="r"><code>#List of 2
+# $ Train:List of 2
+#  ..$ Train_Original          : num [1:84, 1:512, 1:512, 1] 0.518 0.455 0.455 0.447 0.439 ...
+#  ..$ Train_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 0 0 0 0 0 0 0 0 0 ...
+# $ Test :List of 2
+#  ..$ Test_Original          : num [1:84, 1:512, 1:512, 1] 0.604 0.467 0.459 0.435 0.408 ...
+#  ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...</code></pre>
 <p><code>LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.Rds</code> is a list of
 4D arrays with the binary labels for the image segmentation of Human HeLa cells on a flat glass.</p>
 </div>
@@ -532,7 +548,7 @@ history &lt;- model %&gt;%
   keras::fit(x = X, 
              y = Y,
              batch_size = 2,
-             epochs = 50,
+             epochs = 2,
              verbose = 1)</code></pre>
 <ul>
 <li>Parameters:
@@ -540,6 +556,12 @@ history &lt;- model %&gt;%
 <li>batch_size: Number of samples per gradient update / 1度に計算するサンプル数</li>
 <li>epochs: Number of epochs to train the model / エポック数:一つの訓練データを何回繰り返して学習させるか</li>
 <li>verbose: Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) / 表示モード</li>
+</ul></li>
+<li>Training Speed (3rd Nov 2021):
+<ul>
+<li>Orchestra: 15.7 s/step</li>
+<li>MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step</li>
+<li>GPU:</li>
 </ul></li>
 </ul>
 </div>
@@ -575,12 +597,14 @@ modelR &lt;- modelR %&gt;%
      )
 
 #Re-fit
+if(F){
 history &lt;- modelR %&gt;%
   keras::fit(x = X, 
              y = Y,
              batch_size = 2,
-             epochs = 50,
-             verbose = 1)</code></pre>
+             epochs = 1,
+             verbose = 1)
+}</code></pre>
 </div>
 </div>
 <div id="view-results" class="section level1" number="5">
@@ -615,13 +639,27 @@ cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4),
 rMiW::ImageView2D(X,
             Y_pred,
             ImgN=n)
-Sys.sleep(0.1)
 }</code></pre>
 <p>We can visualize the results using another function.</p>
-<pre class="r"><code>ImageView2D_pred(ImgArray_x=X,
+<pre class="r"><code>#Imge: 2
+ImageView2D_pred(ImgArray_x=X,
                  ImgArray_y=Y,
                  ImgArray_pred=Y_pred,
-                 ImgN=2)</code></pre>
+                 ImgN=2)
+
+#Imge: 6
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=6)
+
+#Image: All
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=N)
+}</code></pre>
 </div>
 </div>
 <div id="prediction-for-test-dataset-20-images" class="section level1" number="6">
@@ -650,19 +688,13 @@ cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4),
 <pre class="r"><code>Test_Y_pred &lt;- rMiW::model.pred(model=modelR, 
                                 x=Test_X)
 
-#visualization 01
-for(n in 1:20){
-ImageView2D(Test_X,
-            Test_Y_pred,
-            ImgN=n)
-Sys.sleep(0.1)
-}
-
-#visualization 02
+#visualization
+for(N in 1:20){
 ImageView2D_pred(ImgArray_x=Test_X,
                  ImgArray_y=Test_Y,
                  ImgArray_pred=Test_Y_pred,
-                 ImgN=2)</code></pre>
+                 ImgN=N)
+}</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level1 unnumbered">
