@@ -40,7 +40,7 @@ library(EBImage)
 library(rMiW)
 ```
 
-##Optional: Update (ver 3.14)
+## Optional: Update (ver 3.14)
 
 ```{r echo=TRUE, eval=FALSE}
 BiocManager::install(version = "3.14")
@@ -55,6 +55,7 @@ observing the kidney tissue of C57BL/6J mouse (male, 10 week-old) stained by H&E
 
 ```{r echo=TRUE, eval=TRUE}
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
+file
 
 #Read image
 Img <- EBImage::readImage(files = file)
@@ -65,12 +66,12 @@ Here, `::` in R script indicates an explicit relation between the package and th
 
 ## Visualization
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 #Visualization
 EBImage::display(Img, method = "raster")
 ```
 
-```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=FALSE}
+```{r Fig001, out.width = '75%', fig.cap = "Mouse01_Kid_x20_z0_RR01.png", echo = FALSE, eval=TRUE}
 ##Skip execution for this chunk.
 options(EBImage.display = "raster")
 file <- system.file("extdata", "Mouse01_Kid_x20_z0_RR01.png", package="rMiW")
@@ -89,7 +90,9 @@ In this section, we will handle the Image object of EBIimage and perform image p
 #Img <- EBImage::readImage(files = file)
 
 #Convert to the gray image
-GrayImg <- toGrayScale(Img, mode = "luminance")
+GrayImg <- rMiW::toGrayScale(Img, mode = "luminance")
+str(GrayImg)
+str(Img)
 
 #Visualization
 EBImage::display(GrayImg, method = "raster")
@@ -220,7 +223,7 @@ text(x = dim(Imgflop)[1]/20, y = dim(Imgflop)[2]/10, label = "Flop", adj = c(0,0
 
 We can save the file in image format (jpeg, png, tiff) or R binary (.Rds).
 
-```{r echo=TRUE, eval=FALSE}
+```{r echo=TRUE, eval=TRUE}
 #Save as PNG
 EBImage::writeImage(Img, files = "./Img.png",
                     type = "png")
@@ -233,6 +236,7 @@ EBImage::writeImage(Img, files = "./Img.tif",
 ```{r echo=TRUE, eval=TRUE}
 #Save as R binary for single Objects (.Rda)
 saveRDS(Img, "./Img.Rds")
+dir()
 
 #Read Rds format
 ImgRds <- readRDS("./Img.Rds")
@@ -254,6 +258,7 @@ CellImg <- readRDS(file)
 str(CellImg)
 
 #Cell image
+par(mfrow=c(1,1))
 EBImage::display(CellImg$X, method = "raster")
 
 #Display them side-by-side.
@@ -279,6 +284,7 @@ rMiW::ImageView2D(ImgArray_x=CellImg$X,
 
 ```{r echo=TRUE, eval=TRUE}
 file <- system.file("extdata", "Cell_Img.Rds", package="rMiW")
+file
 
 #Read image
 CellImg <- readRDS(file)
@@ -314,12 +320,13 @@ ImgClus3 <- rMiW::Img2DClustering(x=Img, Cluster = 3, XY=1024)
 str(ImgClus3)
 
 #Visualize as a color image
-rMiW::rasterMiW(res=ImgClus3, method = "raster")
+rMiW::rasterMiW(ImgClus3, method = "raster")
 
 #Barplot
 Calc <- table(unlist(ImgClus3$Cluster)*ImgClus3$ClusterNumber)
 barplot(Calc,
-        ylab="Pixel number of cluster", ylim=c(0, max(Calc)*1.25), col="skyblue")
+        ylab="Pixel number of cluster", ylim=c(0, max(Calc)*1.25), 
+        col=colorspace::rainbow_hcl(ImgClus3$ClusterNumber, c = 70))
 
 ```
 
