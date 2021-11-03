@@ -54,13 +54,13 @@ reticulate::py_config()
 reticulate::py_install("pydot")
 ```
 
-##Optional: install keras / tensorflow (ver 3.14)
+## Optional: install python packages for R keras / tensorflow (ver 3.14)
 
 ```{r echo=TRUE, eval=FALSE}
 keras::install_keras()
 ```
 
-## Optional: Removes all files in a cache file directory
+## Optional: Removes all files in the cache directory
 
 ```{r echo=TRUE, eval=FALSE}
 install.packages("R.cache")
@@ -79,23 +79,22 @@ knitr::purl("./rMiW/vignettes/rMiW_02_BioImageDbs.Rmd", output="./rMiW/vignettes
 About the BioImageDbs package, 
 please ckeck [Providing Bioimage Dataset for ExperimentHub](https://bioconductor.org/packages/release/data/experiment/vignettes/BioImageDbs/inst/doc/BioImageDbs.html) document for more information.
 
-Please check [the metadata of BioImageDbs](https://github.com/kumeS/BioImageDbs/blob/main/inst/extdata/v02/metadata_v02.csv) in GitHub.
+Please check [the metadata (CSV) of BioImageDbs](https://github.com/kumeS/BioImageDbs/blob/main/inst/extdata/v02/metadata_v02.csv) in GitHub.
 
 ```{r echo=TRUE, eval=FALSE}
-#Access via R
-#Providing Bioimage Dataset for ExperimentHub
+#Description: Providing Bioimage Dataset for ExperimentHub
 browseURL("https://bioconductor.org/packages/release/data/experiment/vignettes/BioImageDbs/inst/doc/BioImageDbs.html")
 
-#The metadata of BioImageDbs
+#Metadata (CSV) for BioImageDbs
 browseURL("https://github.com/kumeS/BioImageDbs/blob/main/inst/extdata/v02/metadata_v02.csv")
 ```
 
 ## Search query for the BioImageDbs
 
 Via the ExperimentHub function, 
-we can obtain the supervised image data as a list of R arrays.
+we can obtain the supervised image data as a list of R arrays and their metadata.
 
-Here shows an example of a search query for the BioImageDbs (`snapshotDate(): 2021-10-18`).
+Here shows an example of a search query for the BioImageDbs (Currently, `snapshotDate(): 2021-10-18` for version 3.14).
 
 ```{r echo=TRUE, eval=FALSE}
 #Set the ExperimentHub function
@@ -120,7 +119,7 @@ qr$description[3]
 
 Note:  small `.rds` data does not work. They will be removed in future.
 
-## Acquire the R arrays
+## Acquire the image arrays
 
 We use `[]` to access its metadata while `[[]]` to get its data instance.
 
@@ -149,7 +148,7 @@ str(ImgData)
 `LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.Rds` is a list of 
 4D arrays with the binary labels for the image segmentation of Human HeLa cells on a flat glass.
 
-## Obtain gif animation and show it
+## Show the gif animation
 
 Here we will get a gif animation and check the result of data visualization.
 
@@ -169,6 +168,8 @@ magick::image_read(GifData)
 
 `LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary_train_dataset.gif` is 
 an animation file (.gif) of the train dataset of LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.rds
+
+Currently, only `magick::image_read` is supported to view gif animation files.
 
 # Image Segmentation for cell division images with two class / binary class
 
@@ -193,7 +194,6 @@ ImgShape
 We will make the U-Net model with dropout layers.
 
 ```{r echo=TRUE, eval=FALSE}
-#ImgShape <- c(512,512,1)
 model <- rMiW::unet2D_v01(shape = ImgShape)
 model
 ```
@@ -232,7 +232,19 @@ model <- model %>%
      )
 ```
 
-## Fit the model
+- Parameters:
+  - optimizer: optimizer instance / (最適化アルゴリズム)
+    - learning_rate: Learning rate (float >= 0) / 学習率
+  - loss: Objective function / Loss function / 損失関数 (評価指標)
+  - metrics: Evaluated function / 評価関数
+
+Check the reference sheet in [keras.rstudio.com](https://keras.rstudio.com/index.html):
+
+- [optimizer_rmsprop](https://keras.rstudio.com/reference/optimizer_rmsprop.html)
+
+## Fit the model using 20 images for training
+
+We should use `drop=F` to avoid any change of array shape.
 
 ```{r echo=TRUE, eval=FALSE}
 #Data
@@ -246,12 +258,14 @@ history <- model %>%
              y = Y,
              batch_size = 2,
              epochs = 50,
-             validation_split = 0,
              verbose = 1)
 ```
 
-Should use `drop=F` to avoid any change of array shape.
-
+- Parameters:
+  - batch_size: Number of samples per gradient update / 1度に計算するサンプル数
+  - epochs: Number of epochs to train the model / エポック数:一つの訓練データを何回繰り返して学習させるか
+  - verbose: Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) / 表示モード
+  
 ## Save the model by `save_model_hdf5()`
 
 ```{r echo=TRUE, eval=FALSE}
@@ -268,9 +282,16 @@ and the optimizer configuration.
 
 ## Re-load, re-compile and re-fit
 
+We will load the saved model and run compile and fit. 
+
+We can see that the calculation is done from the continuation.
+
 ```{r echo=TRUE, eval=FALSE}
+#Re-read model
+file <- system.file("extdata", "model_v01.h5", package="rMiW")
+
 #Re-load
-modelR <- keras::load_model_hdf5("model_v01.h5",compile=F)
+modelR <- keras::load_model_hdf5(file, compile=F)
 summary(modelR)
 keras::get_weights(modelR)[[1]]
 
@@ -288,13 +309,14 @@ history <- modelR %>%
              y = Y,
              batch_size = 2,
              epochs = 50,
-             validation_split = 0,
              verbose = 1)
 ```
 
 # View results
 
 ## Model evaluation
+
+Here we evaluate the model object using `keras::evaluate` function.
 
 ```{r echo=TRUE, eval=FALSE}
 ## Model evaluation
@@ -312,6 +334,8 @@ cat(paste0('Train loss:', round(Score[[1]], 4),
 ```
 
 ## Model prediction at image pixel level
+
+The model is used to predict the binarization at the pixel level.
 
 ```{r echo=TRUE, eval=FALSE}
 Y_pred <- rMiW::model.pred(model=modelR, 
@@ -332,8 +356,7 @@ Sys.sleep(0.1)
 }
 ```
 
-We will visualize the results with another function.
-
+We can visualize the results using another function.
 
 ```{r echo=TRUE, eval=FALSE}
 ImageView2D_pred(ImgArray_x=X,
@@ -342,8 +365,7 @@ ImageView2D_pred(ImgArray_x=X,
                  ImgN=2)
 ```
 
-
-# Prediction for test dataset
+# Prediction for test dataset (20 images)
 
 ```{r echo=TRUE, eval=FALSE}
 #Data
@@ -374,20 +396,19 @@ We use `ImageView2D` function for the visualization.
 Test_Y_pred <- rMiW::model.pred(model=modelR, 
                                 x=Test_X)
 
+#visualization 01
 for(n in 1:20){
 ImageView2D(Test_X,
             Test_Y_pred,
             ImgN=n)
 Sys.sleep(0.1)
 }
-```
 
-Test_X
-Test_Y
-Test_Y_pred
-
-```{r echo=TRUE, eval=FALSE}
-
+#visualization 02
+ImageView2D_pred(ImgArray_x=Test_X,
+                 ImgArray_y=Test_Y,
+                 ImgArray_pred=Test_Y_pred,
+                 ImgN=2)
 ```
 
 # Session information {.unnumbered}

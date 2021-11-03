@@ -275,6 +275,24 @@ rMiW::ImageView2D(ImgArray_x=CellImg$X,
 
 ```
 
+## Use `drop=FALSE` to  prevent the array from being deformed
+
+```{r echo=TRUE, eval=TRUE}
+file <- system.file("extdata", "Cell_Img.Rds", package="rMiW")
+
+#Read image
+CellImg <- readRDS(file)
+str(CellImg)
+
+#drop=TRUE
+CellImgT <- CellImg$X[1:512,1:512,,drop=TRUE]
+str(CellImgT)
+
+#drop=FALSE
+CellImgF <- CellImg$X[1:512,1:512,,drop=FALSE]
+str(CellImgF)
+```
+
 # Basic clustering using k-means
 
 k-means clustering is an unsupervised clustering technique to partition 

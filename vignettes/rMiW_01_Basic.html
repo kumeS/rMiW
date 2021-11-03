@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2021-11-02" />
+<meta name="date" content="2021-11-03" />
 
 <title>rMiW: 01. Providing a basic workflow for microscopy-based images</title>
 
@@ -172,7 +172,7 @@ function toggle_visibility(id1) {
 <h1 class="title toc-ignore">rMiW: 01. Providing a basic workflow for microscopy-based images</h1>
 <p class="author-name">Satoshi Kume<span class="affil-mark">*</span></p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:satoshi.kume.1984@gmail.com">satoshi.kume.1984@gmail.com</a></p>
-<h4 class="date">2021-11-02</h4>
+<h4 class="date">2021-11-03</h4>
 <h4 class="package">Package</h4>
 <p>EBImage, rMiW, BiocStyle</p>
 
@@ -194,6 +194,7 @@ function toggle_visibility(id1) {
 <li><a href="#transpose-the-image"><span class="toc-section-number">3.3</span> Transpose the image</a></li>
 <li><a href="#save-image"><span class="toc-section-number">3.4</span> Save image</a></li>
 <li><a href="#mark-objects-in-images"><span class="toc-section-number">3.5</span> Mark objects in images</a></li>
+<li><a href="#use-dropfalse-to-prevent-the-array-from-being-deformed"><span class="toc-section-number">3.6</span> Use <code>drop=FALSE</code> to prevent the array from being deformed</a></li>
 </ul></li>
 <li><a href="#basic-clustering-using-k-means"><span class="toc-section-number">4</span> Basic clustering using k-means</a>
 <ul>
@@ -216,8 +217,8 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-11-02 23:38:19<br />
-<strong>Compiled</strong>: 2021-11-02 23:38:21</p>
+<p><strong>Last modified:</strong> 2021-11-03 12:59:53<br />
+<strong>Compiled</strong>: 2021-11-03 13:00:14</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <pre class="r"><code>#Install packages
@@ -372,6 +373,22 @@ rMiW::ImageView2D(ImgArray_x=CellImg$X,
                   ImgArray_y=CellImg$Y,
                   ImgN=1, 
                   lab=c(&quot;Original&quot;, &quot;Overlay&quot;, &quot;Ground truth&quot;))</code></pre>
+</div>
+<div id="use-dropfalse-to-prevent-the-array-from-being-deformed" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Use <code>drop=FALSE</code> to prevent the array from being deformed</h2>
+<pre class="r"><code>file &lt;- system.file(&quot;extdata&quot;, &quot;Cell_Img.Rds&quot;, package=&quot;rMiW&quot;)
+
+#Read image
+CellImg &lt;- readRDS(file)
+str(CellImg)
+
+#drop=TRUE
+CellImgT &lt;- CellImg$X[1:512,1:512,,drop=TRUE]
+str(CellImgT)
+
+#drop=FALSE
+CellImgF &lt;- CellImg$X[1:512,1:512,,drop=FALSE]
+str(CellImgF)</code></pre>
 </div>
 </div>
 <div id="basic-clustering-using-k-means" class="section level1" number="4">
