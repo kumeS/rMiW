@@ -28,11 +28,14 @@ BiocStyle::markdown()
 
 ## Load packages
 
-```{r echo=TRUE, eval=FALSE, message=FALSE}
+```{r echo=TRUE, message=FALSE, eval=FALSE}
 library(ExperimentHub)
 library(rMiW)
 library(EBImage)
 library(keras)
+
+packageVersion("keras")
+packageVersion("tensorflow")
 ```
 
 ## Optional: Update (ver 3.14)
@@ -132,8 +135,8 @@ Note:  small `.rds` data does not work. They will be removed in future.
 ```{r echo=TRUE, eval=FALSE}
 file <- system.file("script", "gdrive_download.sh", package="rMiW")
 system(paste0("source ", file, " ; gdrive_download 1J-wR0icTCpFgeKPP0iF4cyzD-b1m3tOO ./output.Rds"))
-Dat <- readRDS("output.Rds")
-str(Dat)
+ImgData <- readRDS("output.Rds")
+str(ImgData)
 ```
 https://drive.google.com/file/d//view?usp=sharing
 
@@ -288,9 +291,8 @@ history <- model %>%
 
 - Training Speed (3rd Nov 2021):
   - Orchestra: 15.7 s/step
-  - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step
-  - GPU ():  
-
+  - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step (7.3-fold faster)
+  - GPU (Quadro RTX 8000):  51 ms/step (307.8-fold faster)
 
 ```{r Fig001, out.width = '75%', fig.cap = "keras::fit process", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
