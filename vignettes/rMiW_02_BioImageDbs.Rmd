@@ -41,22 +41,30 @@ library(keras)
 BiocManager::install(version = "3.14")
 ```
 
-## Optional:  Python environment on R
+## Optional: Python environment on R
 
 ```{r echo=TRUE, eval=FALSE}
 #On MacOSX
 library(reticulate)
 #reticulate::install_miniconda(force = T)
-#reticulate::use_python("~Library/r-miniconda/envs/r-reticulate/bin/python")
+#reticulate::use_python("~/Library/r-miniconda/envs/r-reticulate/bin/python")
 reticulate::py_config()
 
 #install pydot
-reticulate::py_install("pydot")
+#reticulate::py_install("pydot")
+
+#On CentOS
+library(reticulate)
+#reticulate::install_miniconda(force = T)
+#reticulate::use_python("~/.local/share/r-miniconda/envs/r-reticulate/bin/python")
+reticulate::py_config()
+
 ```
 
 ## Optional: install python packages for R keras / tensorflow (ver 3.14)
 
 ```{r echo=TRUE, eval=FALSE}
+#For CPU
 keras::install_keras()
 ```
 
@@ -257,7 +265,7 @@ history <- model %>%
   keras::fit(x = X, 
              y = Y,
              batch_size = 2,
-             epochs = 50,
+             epochs = 2,
              verbose = 1)
 ```
 
@@ -265,7 +273,18 @@ history <- model %>%
   - batch_size: Number of samples per gradient update / 1度に計算するサンプル数
   - epochs: Number of epochs to train the model / エポック数:一つの訓練データを何回繰り返して学習させるか
   - verbose: Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) / 表示モード
-  
+
+- Training Speed (3rd Nov 2021):
+  - Orchestra: 15.7 s/step
+  - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step
+  - GPU: 
+
+```{r Fig001, out.width = '75%', fig.cap = "keras::fit process", echo = FALSE, eval=FALSE}
+##Skip execution for this chunk.
+file <- system.file("extdata", "Fit.png", package="rMiW")
+EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
+```
+
 ## Save the model by `save_model_hdf5()`
 
 ```{r echo=TRUE, eval=FALSE}
@@ -304,12 +323,14 @@ modelR <- modelR %>%
      )
 
 #Re-fit
+if(F){
 history <- modelR %>%
   keras::fit(x = X, 
              y = Y,
              batch_size = 2,
-             epochs = 50,
+             epochs = 1,
              verbose = 1)
+}
 ```
 
 # View results
@@ -352,17 +373,31 @@ for(n in 1:20){
 rMiW::ImageView2D(X,
             Y_pred,
             ImgN=n)
-Sys.sleep(0.1)
 }
 ```
 
 We can visualize the results using another function.
 
 ```{r echo=TRUE, eval=FALSE}
+#Imge: 2
 ImageView2D_pred(ImgArray_x=X,
                  ImgArray_y=Y,
                  ImgArray_pred=Y_pred,
                  ImgN=2)
+
+#Imge: 6
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=6)
+
+#Image: All
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=N)
+}
 ```
 
 # Prediction for test dataset (20 images)
@@ -396,19 +431,14 @@ We use `ImageView2D` function for the visualization.
 Test_Y_pred <- rMiW::model.pred(model=modelR, 
                                 x=Test_X)
 
-#visualization 01
-for(n in 1:20){
-ImageView2D(Test_X,
-            Test_Y_pred,
-            ImgN=n)
-Sys.sleep(0.1)
-}
-
-#visualization 02
+#visualization
+for(N in 1:20){
 ImageView2D_pred(ImgArray_x=Test_X,
                  ImgArray_y=Test_Y,
                  ImgArray_pred=Test_Y_pred,
-                 ImgN=2)
+                 ImgN=N)
+}
+
 ```
 
 # Session information {.unnumbered}
