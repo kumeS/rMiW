@@ -42,7 +42,7 @@ library(rMiW)
 
 ##Optional: Update (ver 3.14)
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 BiocManager::install(version = "3.14")
 ```
 
@@ -65,7 +65,7 @@ Here, `::` in R script indicates an explicit relation between the package and th
 
 ## Visualization
 
-```{r echo=TRUE, eval=FALSE}
+```{r echo=TRUE, eval=TRUE}
 #Visualization
 EBImage::display(Img, method = "raster")
 ```
