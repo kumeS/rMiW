@@ -208,17 +208,25 @@ function toggle_visibility(id1) {
 <li><a href="#compile-the-model"><span class="toc-section-number">4.1</span> Compile the model</a></li>
 <li><a href="#fit-the-model-using-20-images-for-training"><span class="toc-section-number">4.2</span> Fit the model using 20 images for training</a></li>
 <li><a href="#save-the-model-by-save_model_hdf5"><span class="toc-section-number">4.3</span> Save the model by <code>save_model_hdf5()</code></a></li>
-<li><a href="#re-load-re-compile-and-re-fit"><span class="toc-section-number">4.4</span> Re-load, re-compile and re-fit</a></li>
-</ul></li>
-<li><a href="#view-results"><span class="toc-section-number">5</span> View results</a>
+<li><a href="#re-load-re-compile-and-re-fit"><span class="toc-section-number">4.4</span> Re-load, re-compile and re-fit</a>
 <ul>
-<li><a href="#model-evaluation"><span class="toc-section-number">5.1</span> Model evaluation</a></li>
-<li><a href="#model-prediction-at-image-pixel-level"><span class="toc-section-number">5.2</span> Model prediction at image pixel level</a></li>
-<li><a href="#visualization-of-results"><span class="toc-section-number">5.3</span> visualization of results</a></li>
+<li><a href="#model_v01.h5-training-60-epochs"><span class="toc-section-number">4.4.1</span> model_v01.h5 (training: 60 epochs)</a></li>
+<li><a href="#model_v02.h5-training-2000-epochs"><span class="toc-section-number">4.4.2</span> model_v02.h5 (training: 2000 epochs)</a></li>
 </ul></li>
-<li><a href="#prediction-for-test-dataset-20-images"><span class="toc-section-number">6</span> Prediction for test dataset (20 images)</a>
+</ul></li>
+<li><a href="#model-evaluation-of-model_v01.h5"><span class="toc-section-number">5</span> Model evaluation of model_v01.h5</a>
 <ul>
-<li><a href="#visualization-of-test-results"><span class="toc-section-number">6.1</span> visualization of test results</a></li>
+<li><a href="#model-prediction-at-image-pixel-level"><span class="toc-section-number">5.1</span> Model prediction at image pixel level</a></li>
+<li><a href="#visualization-of-training-results"><span class="toc-section-number">5.2</span> Visualization of training results</a></li>
+<li><a href="#prediction-for-test-dataset-20-images"><span class="toc-section-number">5.3</span> Prediction for test dataset (20 images)</a></li>
+<li><a href="#visualization-of-test-results"><span class="toc-section-number">5.4</span> Visualization of test results</a></li>
+</ul></li>
+<li><a href="#model-evaluation-of-model_v02.h5"><span class="toc-section-number">6</span> Model evaluation of model_v02.h5</a>
+<ul>
+<li><a href="#model-prediction-at-image-pixel-level-1"><span class="toc-section-number">6.1</span> Model prediction at image pixel level</a></li>
+<li><a href="#visualization-of-results"><span class="toc-section-number">6.2</span> Visualization of results</a></li>
+<li><a href="#prediction-for-test-dataset-20-images-1"><span class="toc-section-number">6.3</span> Prediction for test dataset (20 images)</a></li>
+<li><a href="#visualization-of-test-results-1"><span class="toc-section-number">6.4</span> Visualization of test results</a></li>
 </ul></li>
 <li><a href="#session-information">Session information</a></li>
 </ul>
@@ -237,8 +245,8 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-11-04 00:11:40<br />
-<strong>Compiled</strong>: 2021-11-04 00:12:30</p>
+<p><strong>Last modified:</strong> 2021-11-04 01:15:08<br />
+<strong>Compiled</strong>: 2021-11-04 01:15:19</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <div id="load-packages" class="section level2" number="1.1">
@@ -439,7 +447,7 @@ plot_model_modi(model=model)</code></pre>
 <div id="fit-the-model-using-20-images-for-training" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Fit the model using 20 images for training</h2>
 <p>We should use <code>drop=F</code> to avoid any change of array shape.</p>
-<pre class="r"><code>#Data
+<pre class="r"><code>#Create Train Data
 X &lt;- ImgData$Train$Train_Original[1:20,,,,drop=FALSE]
 str(X)
 Y &lt;- ImgData$Train$Train_GroundTruth_Binary[1:20,,,,drop=FALSE]
@@ -481,6 +489,8 @@ and the optimizer configuration.</p>
 <h2><span class="header-section-number">4.4</span> Re-load, re-compile and re-fit</h2>
 <p>We will load the saved model and run compile and fit.</p>
 <p>We can see that the calculation is done from the continuation.</p>
+<div id="model_v01.h5-training-60-epochs" class="section level3" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> model_v01.h5 (training: 60 epochs)</h3>
 <pre class="r"><code>#Re-read model
 file &lt;- system.file(&quot;extdata&quot;, &quot;model_v01.h5&quot;, package=&quot;rMiW&quot;)
 
@@ -497,7 +507,7 @@ modelR &lt;- modelR %&gt;%
        metrics = rMiW::dice_coef
      )
 
-#Re-fit
+#Re-fit: Do not re-fit in this section
 if(F){
 history &lt;- modelR %&gt;%
   keras::fit(x = X, 
@@ -507,11 +517,28 @@ history &lt;- modelR %&gt;%
              verbose = 1)
 }</code></pre>
 </div>
+<div id="model_v02.h5-training-2000-epochs" class="section level3" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> model_v02.h5 (training: 2000 epochs)</h3>
+<pre class="r"><code>#Re-read model
+file &lt;- system.file(&quot;extdata&quot;, &quot;model_v02.h5&quot;, package=&quot;rMiW&quot;)
+
+#Re-load
+modelR2 &lt;- keras::load_model_hdf5(file, compile=F)
+summary(modelR2)
+keras::get_weights(modelR2)[[1]]
+
+#Re-compile
+modelR2 &lt;- modelR2 %&gt;%
+     keras::compile(
+       optimizer = keras::optimizer_rmsprop(learning_rate = 0.01),
+       loss = rMiW::bce_dice_loss,
+       metrics = rMiW::dice_coef
+     )</code></pre>
 </div>
-<div id="view-results" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> View results</h1>
-<div id="model-evaluation" class="section level2" number="5.1">
-<h2><span class="header-section-number">5.1</span> Model evaluation</h2>
+</div>
+</div>
+<div id="model-evaluation-of-model_v01.h5" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Model evaluation of model_v01.h5</h1>
 <p>Here we evaluate the model object using <code>keras::evaluate</code> function.</p>
 <pre class="r"><code>## Model evaluation
 Score &lt;- modelR %&gt;% 
@@ -525,15 +552,14 @@ cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4),
 #model_v01 (training: 60 epochs)
 #Train loss:1.3279
 #Train accuracy:0.8672</code></pre>
-</div>
-<div id="model-prediction-at-image-pixel-level" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> Model prediction at image pixel level</h2>
+<div id="model-prediction-at-image-pixel-level" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Model prediction at image pixel level</h2>
 <p>The model is used to predict the binarization at the pixel level.</p>
 <pre class="r"><code>Y_pred &lt;- rMiW::model.pred(model=modelR, 
                            x=X)</code></pre>
 </div>
-<div id="visualization-of-results" class="section level2" number="5.3">
-<h2><span class="header-section-number">5.3</span> visualization of results</h2>
+<div id="visualization-of-training-results" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Visualization of training results</h2>
 <p>We use <code>ImageView2D</code> function for the visualization.</p>
 <pre class="r"><code>for(n in 1:20){
 #n &lt;- 2
@@ -562,9 +588,8 @@ ImageView2D_pred(ImgArray_x=X,
                  ImgN=N)
 }</code></pre>
 </div>
-</div>
-<div id="prediction-for-test-dataset-20-images" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Prediction for test dataset (20 images)</h1>
+<div id="prediction-for-test-dataset-20-images" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Prediction for test dataset (20 images)</h2>
 <pre class="r"><code>#Data
 Test_X &lt;- ImgData$Train$Train_Original[21:40,,,,drop=FALSE]
 str(Test_X)
@@ -581,12 +606,100 @@ cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4),
            &#39;\nTrain accuracy:&#39;, round(Score[[2]], 4)))
 
 #model_v01 (training: 60 epochs)
-#Train loss:XXXX
-#Train accuracy:XXX</code></pre>
-<div id="visualization-of-test-results" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> visualization of test results</h2>
+#Train loss:1.1545
+#Train accuracy:0.8758</code></pre>
+</div>
+<div id="visualization-of-test-results" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Visualization of test results</h2>
 <p>We use <code>ImageView2D</code> function for the visualization.</p>
 <pre class="r"><code>Test_Y_pred &lt;- rMiW::model.pred(model=modelR, 
+                                x=Test_X)
+
+#visualization
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=Test_X,
+                 ImgArray_y=Test_Y,
+                 ImgArray_pred=Test_Y_pred,
+                 ImgN=N)
+}</code></pre>
+</div>
+</div>
+<div id="model-evaluation-of-model_v02.h5" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Model evaluation of model_v02.h5</h1>
+<p>Here we evaluate the model object using <code>keras::evaluate</code> function.</p>
+<pre class="r"><code>## Model evaluation
+Score &lt;- modelR2 %&gt;% 
+  keras::evaluate(X,
+                  Y, 
+                  verbose = 1)
+
+cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4), 
+           &#39;\nTrain accuracy:&#39;, round(Score[[2]], 4)))
+
+#model_v02 (training: 2000 epochs)
+#Train loss:0.0051
+#Train accuracy:0.9978</code></pre>
+<div id="model-prediction-at-image-pixel-level-1" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Model prediction at image pixel level</h2>
+<p>The model is used to predict the binarization at the pixel level.</p>
+<pre class="r"><code>Y_pred &lt;- rMiW::model.pred(model=modelR2, 
+                           x=X)</code></pre>
+</div>
+<div id="visualization-of-results" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Visualization of results</h2>
+<p>We use <code>ImageView2D</code> function for the visualization.</p>
+<pre class="r"><code>for(n in 1:20){
+#n &lt;- 2
+rMiW::ImageView2D(X,
+            Y_pred,
+            ImgN=n)
+}</code></pre>
+<p>We can visualize the results using another function.</p>
+<pre class="r"><code>#Imge: 2
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=2)
+
+#Imge: 6
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=6)
+
+#Image: All
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=N)
+}</code></pre>
+</div>
+<div id="prediction-for-test-dataset-20-images-1" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Prediction for test dataset (20 images)</h2>
+<pre class="r"><code>#Data
+Test_X &lt;- ImgData$Train$Train_Original[21:40,,,,drop=FALSE]
+str(Test_X)
+Test_Y &lt;- ImgData$Train$Train_GroundTruth_Binary[21:40,,,,drop=FALSE]
+str(Test_Y)
+
+## Model evaluation
+Score &lt;- modelR2 %&gt;% 
+  keras::evaluate(Test_X, 
+                  Test_Y, 
+                  verbose = 1)
+
+cat(paste0(&#39;Train loss:&#39;, round(Score[[1]], 4), 
+           &#39;\nTrain accuracy:&#39;, round(Score[[2]], 4)))
+
+#model_v01 (training: 2000 epochs)
+#Train loss:0.8893
+#Train accuracy:0.9292</code></pre>
+</div>
+<div id="visualization-of-test-results-1" class="section level2" number="6.4">
+<h2><span class="header-section-number">6.4</span> Visualization of test results</h2>
+<p>We use <code>ImageView2D</code> function for the visualization.</p>
+<pre class="r"><code>Test_Y_pred &lt;- rMiW::model.pred(model=modelR2, 
                                 x=Test_X)
 
 #visualization

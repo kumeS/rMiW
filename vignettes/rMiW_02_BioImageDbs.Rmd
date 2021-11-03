@@ -269,7 +269,7 @@ Check the reference sheet in [keras.rstudio.com](https://keras.rstudio.com/index
 We should use `drop=F` to avoid any change of array shape.
 
 ```{r echo=TRUE, eval=FALSE}
-#Data
+#Create Train Data
 X <- ImgData$Train$Train_Original[1:20,,,,drop=FALSE]
 str(X)
 Y <- ImgData$Train$Train_GroundTruth_Binary[1:20,,,,drop=FALSE]
@@ -294,9 +294,15 @@ history <- model %>%
   - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step (7.3-fold faster)
   - GPU (Quadro RTX 8000):  51 ms/step (307.8-fold faster)
 
-```{r Fig001, out.width = '75%', fig.cap = "keras::fit process", echo = FALSE, eval=FALSE}
+```{r Fig001, out.width = '75%', fig.cap = "keras::fit process: 50 epochs (model_v01.h5)", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
-file <- system.file("extdata", "Fit.png", package="rMiW")
+file <- system.file("extdata", "Fit_01.png", package="rMiW")
+EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
+```
+
+```{r Fig002, out.width = '75%', fig.cap = "keras::fit process: 2000 epochs with GPU (model_v02.h5)", echo = FALSE, eval=FALSE}
+##Skip execution for this chunk.
+file <- system.file("extdata", "Fit_02.png", package="rMiW")
 EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
 ```
 
@@ -320,6 +326,8 @@ We will load the saved model and run compile and fit.
 
 We can see that the calculation is done from the continuation.
 
+### model_v01.h5 (training: 60 epochs)
+
 ```{r echo=TRUE, eval=FALSE}
 #Re-read model
 file <- system.file("extdata", "model_v01.h5", package="rMiW")
@@ -337,7 +345,7 @@ modelR <- modelR %>%
        metrics = rMiW::dice_coef
      )
 
-#Re-fit
+#Re-fit: Do not re-fit in this section
 if(F){
 history <- modelR %>%
   keras::fit(x = X, 
@@ -348,9 +356,28 @@ history <- modelR %>%
 }
 ```
 
-# View results
+### model_v02.h5 (training: 2000 epochs)
 
-## Model evaluation
+```{r echo=TRUE, eval=FALSE}
+#Re-read model
+file <- system.file("extdata", "model_v02.h5", package="rMiW")
+
+#Re-load
+modelR2 <- keras::load_model_hdf5(file, compile=F)
+summary(modelR2)
+keras::get_weights(modelR2)[[1]]
+
+#Re-compile
+modelR2 <- modelR2 %>%
+     keras::compile(
+       optimizer = keras::optimizer_rmsprop(learning_rate = 0.01),
+       loss = rMiW::bce_dice_loss,
+       metrics = rMiW::dice_coef
+     )
+
+```
+
+# Model evaluation of model_v01.h5
 
 Here we evaluate the model object using `keras::evaluate` function.
 
@@ -378,7 +405,7 @@ Y_pred <- rMiW::model.pred(model=modelR,
                            x=X)
 ```
 
-## visualization of results
+## Visualization of training results
 
 We use `ImageView2D` function for the visualization.
 
@@ -415,7 +442,7 @@ ImageView2D_pred(ImgArray_x=X,
 }
 ```
 
-# Prediction for test dataset (20 images)
+## Prediction for test dataset (20 images)
 
 ```{r echo=TRUE, eval=FALSE}
 #Data
@@ -434,16 +461,122 @@ cat(paste0('Train loss:', round(Score[[1]], 4),
            '\nTrain accuracy:', round(Score[[2]], 4)))
 
 #model_v01 (training: 60 epochs)
-#Train loss:XXXX
-#Train accuracy:XXX
+#Train loss:1.1545
+#Train accuracy:0.8758
 ```
 
-## visualization of test results
+## Visualization of test results
 
 We use `ImageView2D` function for the visualization.
 
 ```{r echo=TRUE, eval=FALSE}
 Test_Y_pred <- rMiW::model.pred(model=modelR, 
+                                x=Test_X)
+
+#visualization
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=Test_X,
+                 ImgArray_y=Test_Y,
+                 ImgArray_pred=Test_Y_pred,
+                 ImgN=N)
+}
+
+```
+
+# Model evaluation of model_v02.h5
+
+Here we evaluate the model object using `keras::evaluate` function.
+
+```{r echo=TRUE, eval=FALSE}
+## Model evaluation
+Score <- modelR2 %>% 
+  keras::evaluate(X,
+                  Y, 
+                  verbose = 1)
+
+cat(paste0('Train loss:', round(Score[[1]], 4), 
+           '\nTrain accuracy:', round(Score[[2]], 4)))
+
+#model_v02 (training: 2000 epochs)
+#Train loss:0.0051
+#Train accuracy:0.9978
+```
+
+## Model prediction at image pixel level
+
+The model is used to predict the binarization at the pixel level.
+
+```{r echo=TRUE, eval=FALSE}
+Y_pred <- rMiW::model.pred(model=modelR2, 
+                           x=X)
+```
+
+## Visualization of results
+
+We use `ImageView2D` function for the visualization.
+
+```{r echo=TRUE, eval=FALSE}
+for(n in 1:20){
+#n <- 2
+rMiW::ImageView2D(X,
+            Y_pred,
+            ImgN=n)
+}
+```
+
+We can visualize the results using another function.
+
+```{r echo=TRUE, eval=FALSE}
+#Imge: 2
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=2)
+
+#Imge: 6
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=6)
+
+#Image: All
+for(N in 1:20){
+ImageView2D_pred(ImgArray_x=X,
+                 ImgArray_y=Y,
+                 ImgArray_pred=Y_pred,
+                 ImgN=N)
+}
+```
+
+## Prediction for test dataset (20 images)
+
+```{r echo=TRUE, eval=FALSE}
+#Data
+Test_X <- ImgData$Train$Train_Original[21:40,,,,drop=FALSE]
+str(Test_X)
+Test_Y <- ImgData$Train$Train_GroundTruth_Binary[21:40,,,,drop=FALSE]
+str(Test_Y)
+
+## Model evaluation
+Score <- modelR2 %>% 
+  keras::evaluate(Test_X, 
+                  Test_Y, 
+                  verbose = 1)
+
+cat(paste0('Train loss:', round(Score[[1]], 4), 
+           '\nTrain accuracy:', round(Score[[2]], 4)))
+
+#model_v01 (training: 2000 epochs)
+#Train loss:0.8893
+#Train accuracy:0.9292
+```
+
+## Visualization of test results
+
+We use `ImageView2D` function for the visualization.
+
+```{r echo=TRUE, eval=FALSE}
+Test_Y_pred <- rMiW::model.pred(model=modelR2, 
                                 x=Test_X)
 
 #visualization
