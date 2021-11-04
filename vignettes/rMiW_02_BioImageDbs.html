@@ -245,8 +245,8 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> 2021-11-04 01:15:08<br />
-<strong>Compiled</strong>: 2021-11-04 01:15:19</p>
+<p><strong>Last modified:</strong> 2021-11-04 15:18:10<br />
+<strong>Compiled</strong>: 2021-11-04 15:18:57</p>
 <div id="getting-started" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting started</h1>
 <div id="load-packages" class="section level2" number="1.1">
@@ -337,7 +337,6 @@ qr$description[3]</code></pre>
 system(paste0(&quot;source &quot;, file, &quot; ; gdrive_download 1J-wR0icTCpFgeKPP0iF4cyzD-b1m3tOO ./output.Rds&quot;))
 ImgData &lt;- readRDS(&quot;output.Rds&quot;)
 str(ImgData)</code></pre>
-<p><a href="https://drive.google.com/file/d//view?usp=sharing" class="uri">https://drive.google.com/file/d//view?usp=sharing</a></p>
 </div>
 <div id="acquire-the-image-arrays" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Acquire the image arrays</h2>
@@ -359,7 +358,11 @@ str(ImgData)
 #  ..$ Train_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 0 0 0 0 0 0 0 0 0 ...
 # $ Test :List of 2
 #  ..$ Test_Original          : num [1:84, 1:512, 1:512, 1] 0.604 0.467 0.459 0.435 0.408 ...
-#  ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...</code></pre>
+#  ..$ Test_GroundTruth_Binary: num [1:84, 1:512, 1:512, 1] 0 1 1 1 1 1 1 0 0 0 ...
+
+#show an image
+EBImage::display(EBImage::Image(ImgData$Train$Train_Original[1,,,]),
+                 method=&quot;raster&quot;)</code></pre>
 <p><code>LM_id0001_DIC_C2DH_HeLa_4dTensor_Binary.Rds</code> is a list of
 4D arrays with the binary labels for the image segmentation of Human HeLa cells on a flat glass.</p>
 </div>
