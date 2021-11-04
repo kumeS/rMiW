@@ -138,8 +138,6 @@ system(paste0("source ", file, " ; gdrive_download 1J-wR0icTCpFgeKPP0iF4cyzD-b1m
 ImgData <- readRDS("output.Rds")
 str(ImgData)
 ```
-https://drive.google.com/file/d//view?usp=sharing
-
 
 ## Acquire the image arrays
 

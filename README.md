@@ -8,9 +8,10 @@ This package provides a workflow for pre-processing, analysis and deep learning 
 - R language usage / Bioconductor
 - Keras/Tensorflow usage in R
 - Microscopy-based images, especially electron microscopy images
-- Image pre-processing (read, display, and resize etc)
-- Deep learning (DL) models for image analysis
-- Semantic segmentation for 2D/3D  images using DL
+- Providing workflows for microscopy-based image analysis
+  - Image pre-processing (read, display, and resize etc)
+  - Deep learning (DL) models for image analysis
+  - Semantic segmentation for 2D/3D  images using DL
 - Integrated usage with [BioImageDBs](https://bioconductor.org/packages/release/data/experiment/html/BioImageDbs.html)
 
   - Future plan
