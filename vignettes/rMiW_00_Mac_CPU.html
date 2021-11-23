@@ -12,7 +12,7 @@
 
 <meta name="date" content="2021-11-23" />
 
-<title>Checking the GPU condition on CnetOS7</title>
+<title>Checking the condition on MacOSX</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -713,7 +713,7 @@ function toggle_visibility(id1) {
 
 
 
-<h1 class="title toc-ignore">Checking the GPU condition on CnetOS7</h1>
+<h1 class="title toc-ignore">Checking the condition on MacOSX</h1>
 <p class="author-name">Satoshi Kume<span class="affil-mark">*</span></p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:satoshi.kume.1984@gmail.com">satoshi.kume.1984@gmail.com</a></p>
 <h4 class="date">2021-11-23</h4>
@@ -725,8 +725,8 @@ function toggle_visibility(id1) {
 <h1>Contents</h1>
 <div id="TOC">
 <ul>
-<li><a href="#check-the-package-version"><span class="toc-section-number">1</span> Check the package version</a></li>
-<li><a href="#check-the-gpu-conditions"><span class="toc-section-number">2</span> Check the GPU conditions</a></li>
+<li><a href="#check-the-r-package-version"><span class="toc-section-number">1</span> Check the R package version</a></li>
+<li><a href="#check-the-python-version"><span class="toc-section-number">2</span> Check the Python version</a></li>
 <li><a href="#session-information">Session information</a></li>
 </ul>
 </div>
@@ -744,21 +744,62 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script>
-<p><strong>Last modified:</strong> NA<br />
-<strong>Compiled</strong>: Tue Nov 23 19:32:39 2021</p>
-<p>Run the following commands after the installation of CUDA on CentOS.</p>
-<div id="check-the-package-version" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Check the package version</h1>
-<pre class="r"><code>packageVersion(&quot;keras&quot;)
-packageVersion(&quot;tensorflow&quot;)</code></pre>
+<p><strong>Last modified:</strong> 2021-11-23 19:52:46<br />
+<strong>Compiled</strong>: Tue Nov 23 19:55:00 2021</p>
+<div id="check-the-r-package-version" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Check the R package version</h1>
+<pre class="r"><code>packageVersion(&quot;keras&quot;)</code></pre>
+<pre><code>## [1] &#39;2.6.1&#39;</code></pre>
+<pre class="r"><code>packageVersion(&quot;tensorflow&quot;)</code></pre>
+<pre><code>## [1] &#39;2.6.0&#39;</code></pre>
+<pre class="r"><code>packageVersion(&quot;EBImage&quot;)</code></pre>
+<pre><code>## [1] &#39;4.36.0&#39;</code></pre>
+<pre class="r"><code>packageVersion(&quot;rMiW&quot;)</code></pre>
+<pre><code>## [1] &#39;0.99.4&#39;</code></pre>
 </div>
-<div id="check-the-gpu-conditions" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Check the GPU conditions</h1>
-<pre class="r"><code>system(&quot;nvidia-smi&quot;)
-
-system(&quot;lspci | grep -i nvidia&quot;)
-system(&quot;nvidia-smi -l&quot;)
-system(&quot;nvidia-smi dmon -s pu -d 5&quot;)</code></pre>
+<div id="check-the-python-version" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Check the Python version</h1>
+<pre class="r"><code>library(reticulate)
+reticulate::py_config()</code></pre>
+<pre><code>## python:         /Users/skume/Library/r-miniconda/envs/r-reticulate/bin/python
+## libpython:      /Users/skume/Library/r-miniconda/envs/r-reticulate/lib/libpython3.7m.dylib
+## pythonhome:     /Users/skume/Library/r-miniconda/envs/r-reticulate:/Users/skume/Library/r-miniconda/envs/r-reticulate
+## version:        3.7.11 (default, Jul 27 2021, 07:03:16)  [Clang 10.0.0 ]
+## numpy:          /Users/skume/Library/r-miniconda/envs/r-reticulate/lib/python3.7/site-packages/numpy
+## numpy_version:  1.19.5</code></pre>
+<pre class="r"><code>reticulate::py_version()</code></pre>
+<pre><code>## [1] &#39;3.7&#39;</code></pre>
+<pre class="r"><code>#pip
+system(paste0(sub(&quot;python$&quot;, &quot;pip&quot;, reticulate::py_config()[[1]]), &quot; -V&quot;), intern = T)</code></pre>
+<pre><code>## [1] &quot;pip 21.3.1 from /Users/skume/Library/r-miniconda/envs/r-reticulate/lib/python3.7/site-packages/pip (python 3.7)&quot;</code></pre>
+<pre class="r"><code>system(paste0(sub(&quot;python$&quot;, &quot;pip&quot;, reticulate::py_config()[[1]]), &quot; list&quot;), intern = T)</code></pre>
+<pre><code>##  [1] &quot;Package                 Version&quot;   &quot;----------------------- ---------&quot;
+##  [3] &quot;absl-py                 0.15.0&quot;    &quot;astunparse              1.6.3&quot;    
+##  [5] &quot;cached-property         1.5.2&quot;     &quot;cachetools              4.2.4&quot;    
+##  [7] &quot;certifi                 2021.10.8&quot; &quot;charset-normalizer      2.0.7&quot;    
+##  [9] &quot;clang                   5.0&quot;       &quot;flatbuffers             1.12&quot;     
+## [11] &quot;gast                    0.4.0&quot;     &quot;google-auth             2.3.3&quot;    
+## [13] &quot;google-auth-oauthlib    0.4.6&quot;     &quot;google-pasta            0.2.0&quot;    
+## [15] &quot;grpcio                  1.41.1&quot;    &quot;h5py                    3.1.0&quot;    
+## [17] &quot;idna                    3.3&quot;       &quot;importlib-metadata      4.8.1&quot;    
+## [19] &quot;keras                   2.6.0&quot;     &quot;Keras-Preprocessing     1.1.2&quot;    
+## [21] &quot;Markdown                3.3.4&quot;     &quot;numpy                   1.19.5&quot;   
+## [23] &quot;oauthlib                3.1.1&quot;     &quot;opt-einsum              3.3.0&quot;    
+## [25] &quot;pandas                  1.3.4&quot;     &quot;Pillow                  8.4.0&quot;    
+## [27] &quot;pip                     21.3.1&quot;    &quot;protobuf                3.19.1&quot;   
+## [29] &quot;pyasn1                  0.4.8&quot;     &quot;pyasn1-modules          0.2.8&quot;    
+## [31] &quot;pydot                   1.2.4&quot;     &quot;pyparsing               3.0.4&quot;    
+## [33] &quot;python-dateutil         2.8.2&quot;     &quot;pytz                    2021.3&quot;   
+## [35] &quot;requests                2.26.0&quot;    &quot;requests-oauthlib       1.3.0&quot;    
+## [37] &quot;rsa                     4.7.2&quot;     &quot;scipy                   1.7.1&quot;    
+## [39] &quot;setuptools              58.0.4&quot;    &quot;six                     1.15.0&quot;   
+## [41] &quot;tensorboard             2.7.0&quot;     &quot;tensorboard-data-server 0.6.1&quot;    
+## [43] &quot;tensorboard-plugin-wit  1.8.0&quot;     &quot;tensorflow              2.6.1&quot;    
+## [45] &quot;tensorflow-estimator    2.6.0&quot;     &quot;tensorflow-hub          0.12.0&quot;   
+## [47] &quot;termcolor               1.1.0&quot;     &quot;typing-extensions       3.7.4.3&quot;  
+## [49] &quot;urllib3                 1.26.7&quot;    &quot;Werkzeug                2.0.2&quot;    
+## [51] &quot;wheel                   0.37.0&quot;    &quot;wrapt                   1.12.1&quot;   
+## [53] &quot;zipp                    3.6.0&quot;</code></pre>
 </div>
 <div id="session-information" class="section level1 unnumbered">
 <h1>Session information</h1>
@@ -777,16 +818,19 @@ system(&quot;nvidia-smi dmon -s pu -d 5&quot;)</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] BiocStyle_2.22.0
+## [1] reticulate_1.22  BiocStyle_2.22.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] bookdown_0.24       digest_0.6.28       R6_2.5.1           
-##  [4] jsonlite_1.7.2      magrittr_2.0.1      evaluate_0.14      
-##  [7] stringi_1.7.5       rlang_0.4.12        jquerylib_0.1.4    
-## [10] bslib_0.3.1         rmarkdown_2.11      tools_4.1.1        
-## [13] stringr_1.4.0       xfun_0.28           yaml_2.2.1         
-## [16] fastmap_1.1.0       compiler_4.1.1      BiocManager_1.30.16
-## [19] htmltools_0.5.2     knitr_1.36          sass_0.4.0</code></pre>
+##  [1] Rcpp_1.0.7          knitr_1.36          magrittr_2.0.1     
+##  [4] lattice_0.20-45     here_1.0.1          R6_2.5.1           
+##  [7] rlang_0.4.12        fastmap_1.1.0       stringr_1.4.0      
+## [10] tools_4.1.1         grid_4.1.1          xfun_0.28          
+## [13] png_0.1-7           jquerylib_0.1.4     htmltools_0.5.2    
+## [16] rprojroot_2.0.2     yaml_2.2.1          digest_0.6.28      
+## [19] bookdown_0.24       Matrix_1.3-4        BiocManager_1.30.16
+## [22] sass_0.4.0          evaluate_0.14       rmarkdown_2.11     
+## [25] stringi_1.7.5       compiler_4.1.1      bslib_0.3.1        
+## [28] jsonlite_1.7.2</code></pre>
 </div>
 
 

@@ -28,7 +28,7 @@ BiocStyle::markdown()
 
 ## Load packages
 
-```{r echo=TRUE, message=FALSE, eval=TRUE}
+```{r echo=TRUE, message=FALSE, eval=FALSE}
 library(ExperimentHub)
 library(rMiW)
 library(EBImage)
@@ -107,7 +107,7 @@ we can obtain the supervised image data as a list of R arrays and their metadata
 
 Here shows an example of a search query for the BioImageDbs (Currently, `snapshotDate(): 2021-10-18` for version 3.14).
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 #Set the ExperimentHub function
 eh <- ExperimentHub::ExperimentHub()
 
@@ -138,8 +138,6 @@ system(paste0("source ", file, " ; gdrive_download 1J-wR0icTCpFgeKPP0iF4cyzD-b1m
 ImgData <- readRDS("output.Rds")
 str(ImgData)
 ```
-https://drive.google.com/file/d//view?usp=sharing
-
 
 ## Acquire the image arrays
 
@@ -147,7 +145,7 @@ We use `[]` to access its metadata while `[[]]` to get its data instance.
 
 We could load from cache (~/Library/Caches/org.R-project.R/R/) once the data was downloaded.
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 #Access metadata
 qr[3]
 
@@ -178,7 +176,7 @@ EBImage::display(EBImage::Image(ImgData$Train$Train_Original[1,,,]),
 
 Here we will get a gif animation and check the result of data visualization.
 
-```{r echo=TRUE, eval=TRUE}
+```{r echo=TRUE, eval=FALSE}
 #Access metadata
 qr[2]
 
@@ -250,7 +248,6 @@ plot_model_modi(model=model)
 Here we will choose the optimizer and loss function.
 
 ```{r echo=TRUE, eval=FALSE}
-library(magrittr)
 model <- model %>%
      keras::compile(
        optimizer = keras::optimizer_rmsprop(learning_rate = 0.01),
@@ -299,18 +296,17 @@ history <- model %>%
   - MacOSX (2.3 GHz quad-core Intel Core i7, KUME): 2.15 s/step (7.3-fold faster)
   - GPU (Quadro RTX 8000):  51 ms/step (307.8-fold faster)
 
-```{r Fig001, out.width = '75%', fig.cap = "keras::fit process: 50 epochs (model_v01.h5)", echo = FALSE, eval=TRUE}
+```{r Fig001, out.width = '75%', fig.cap = "keras::fit process: 50 epochs (model_v01.h5)", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 file <- system.file("extdata", "Fit_01.png", package="rMiW")
 EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
 ```
 
-```{r Fig002, out.width = '75%', fig.cap = "keras::fit process: 2000 epochs with GPU (model_v02.h5)", echo = FALSE, eval=TRUE}
+```{r Fig002, out.width = '75%', fig.cap = "keras::fit process: 2000 epochs with GPU (model_v02.h5)", echo = FALSE, eval=FALSE}
 ##Skip execution for this chunk.
 file <- system.file("extdata", "Fit_02.png", package="rMiW")
 EBImage::display(EBImage::resize(EBImage::readImage(files = file), w = 500), method = "raster")
 ```
-
 
 ## Save the model by `save_model_hdf5()`
 
@@ -409,7 +405,6 @@ The model is used to predict the binarization at the pixel level.
 ```{r echo=TRUE, eval=FALSE}
 Y_pred <- rMiW::model.pred(model=modelR, 
                            x=X)
-str(Y_pred)
 ```
 
 ## Visualization of training results
@@ -429,13 +424,13 @@ We can visualize the results using another function.
 
 ```{r echo=TRUE, eval=FALSE}
 #Imge: 2
-rMiW::ImageView2D_pred(ImgArray_x=X,
+ImageView2D_pred(ImgArray_x=X,
                  ImgArray_y=Y,
                  ImgArray_pred=Y_pred,
                  ImgN=2)
 
 #Imge: 6
-rMiW::ImageView2D_pred(ImgArray_x=X,
+ImageView2D_pred(ImgArray_x=X,
                  ImgArray_y=Y,
                  ImgArray_pred=Y_pred,
                  ImgN=6)
@@ -548,7 +543,7 @@ ImageView2D_pred(ImgArray_x=X,
 
 #Image: All
 for(N in 1:20){
-rMiW::ImageView2D_pred(ImgArray_x=X,
+ImageView2D_pred(ImgArray_x=X,
                  ImgArray_y=Y,
                  ImgArray_pred=Y_pred,
                  ImgN=N)
@@ -588,7 +583,7 @@ Test_Y_pred <- rMiW::model.pred(model=modelR2,
 
 #visualization
 for(N in 1:20){
-rMiW::ImageView2D_pred(ImgArray_x=Test_X,
+ImageView2D_pred(ImgArray_x=Test_X,
                  ImgArray_y=Test_Y,
                  ImgArray_pred=Test_Y_pred,
                  ImgN=N)

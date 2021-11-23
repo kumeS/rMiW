@@ -1,0 +1,52 @@
+---
+title: "Checking the condition on MacOSX"
+author: 
+- name: Satoshi Kume
+  email: satoshi.kume.1984@gmail.com
+date: "`r Sys.Date()`"
+graphics: no
+package: rMiW
+output:
+    BiocStyle::html_document:
+        toc_float: false
+vignette: >
+    %\VignetteIndexEntry{Checking the condition on MacOSX}
+    %\VignetteIndexEntry{rMiW}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+**Last modified:** `r file.info("rMiW_00_Mac_CPU.Rmd")$mtime`<br />
+**Compiled**: `r date()`
+
+# Check the R package version
+
+```{r echo=TRUE, eval=TRUE}
+packageVersion("keras")
+packageVersion("tensorflow")
+packageVersion("EBImage")
+packageVersion("rMiW")
+```
+
+# Check the Python version
+
+```{r echo=TRUE, eval=TRUE}
+library(reticulate)
+reticulate::py_config()
+reticulate::py_version()
+
+#pip
+system(paste0(sub("python$", "pip", reticulate::py_config()[[1]]), " -V"), intern = T)
+system(paste0(sub("python$", "pip", reticulate::py_config()[[1]]), " list"), intern = T)
+```
+
+# Session information {.unnumbered}
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```

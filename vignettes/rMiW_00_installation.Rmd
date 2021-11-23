@@ -47,8 +47,7 @@ library(rMiW)
 
 ```
 
-In addition, you also need to install an ExperimentHub package and 
-`r Rpackage("BioImageDbs")` from Bioconductor.
+In addition, you also need to install an ExperimentHub package from Bioconductor.
 
 ```{r echo=TRUE, eval=FALSE}
 #Check for the installation (30 June 2021)
@@ -56,11 +55,9 @@ In addition, you also need to install an ExperimentHub package and
 
 #Install
 BiocManager::install("ExperimentHub", force = TRUE)
-BiocManager::install("BioImageDbs", force = TRUE)
 
 #Load
 library(ExperimentHub)
-library(BioImageDbs)
 
 ```
 

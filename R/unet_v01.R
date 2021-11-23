@@ -24,7 +24,16 @@ object %>%
 ##' @usage unet2D_v01(shape, nlevels = 3, nfilters = 16, dropouts = c(0.1, 0.1, 0.3, 0.3))
 ##' @param shape a 3-element vector: Width, Height, Channels.
 ##'
-##' @import keras
+##' @importFrom keras layer_conv_2d
+##' @importFrom keras layer_batch_normalization
+##' @importFrom keras layer_activation
+##' @importFrom keras layer_spatial_dropout_2d
+##' @importFrom keras layer_input
+##' @importFrom keras layer_max_pooling_2d
+##' @importFrom keras layer_conv_2d_transpose
+##' @importFrom keras layer_concatenate
+##' @importFrom keras keras_model
+##'
 ##' @export unet2D_v01
 ##' @author Satoshi Kume
 ##'

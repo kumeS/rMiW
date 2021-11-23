@@ -190,21 +190,3 @@ plot_model <- function(model, width=4.5, height=1, ...){
   DiagrammeR::render_graph(graph, layout="dot")
 }
 
-##' @title A new symbol
-##'
-##' @param x an array.
-##' @param y an array.
-##'
-##' @return x
-##' @author Satoshi Kume
-##' @export %||%
-##'
-
-`%||%` <- function(x, y) {
-  if (is.null(x)) {
-    y
-  } else {
-    x
-  }
-}
-
